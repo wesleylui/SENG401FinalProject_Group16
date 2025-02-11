@@ -19,4 +19,9 @@ mvn -v
 npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+then:
+```bash
+npm start
+```
+
+Open [http://localhost:5173](http://localhost:5173) (Vite default) with your browser to see the result.
