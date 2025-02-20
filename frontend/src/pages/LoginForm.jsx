@@ -36,9 +36,11 @@ const LoginForm = () => {
           Login
         </button>
       </form>
-      <button className="bg-gray-500 text-black p-2 rounded w-full mt-3 hover:bg-gray-600 transition">
-        Continue as Guest
-      </button>
+      <Link to="/main">
+        <button className="bg-gray-500 text-black p-2 rounded w-full mt-3 hover:bg-gray-600 transition">
+          Continue as Guest
+        </button>
+      </Link>
       <p className="text-center text-sm mt-3">
         {"Don't have an account?"}{" "}
         <Link
