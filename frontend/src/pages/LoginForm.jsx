@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -15,16 +16,16 @@ const LoginForm = () => {
       <h2 className="text-xl font-bold text-center mb-4">Login</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
+          type="email"
           className="border p-2 w-full mb-3 rounded bg-white text-black"
-          placeholder="Enter your username"
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="password"
           className="border p-2 w-full mb-3 rounded bg-white text-black"
-          placeholder="Enter your password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -40,9 +41,12 @@ const LoginForm = () => {
       </button>
       <p className="text-center text-sm mt-3">
         {"Don't have an account?"}{" "}
-        <span className="text-blue-500 cursor-pointer hover:underline">
+        <Link
+          to="/signup"
+          className="text-blue-500 cursor-pointer hover:underline"
+        >
           Sign up
-        </span>
+        </Link>
       </p>
     </div>
   );
