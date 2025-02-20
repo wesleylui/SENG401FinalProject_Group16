@@ -18,33 +18,33 @@ const SignupForm = () => {
 
   return (
     <div className="bg-white text-black p-6 rounded shadow-lg">
-      <h2 className="text-xl font-bold">Sign Up</h2>
+      <h2 className="text-xl font-bold text-center mb-4">Sign Up</h2>
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
-          className="border p-2 w-full mt-4 bg-white text-black"
+          className="border p-2 w-full mb-3 rounded bg-white text-black"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="password"
-          className="border p-2 w-full mt-2 bg-white text-black"
+          className="border p-2 w-full mb-3 rounded bg-white text-black"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <input
           type="password"
-          className="border p-2 w-full mt-2 bg-white text-black"
+          className="border p-2 w-full mb-3 rounded bg-white text-black"
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <button
           type="submit"
-          className="bg-blue-500 text-black p-2 rounded w-full mt-4"
+          className="bg-blue-500 text-black p-2 rounded w-full hover:bg-blue-600 transition"
         >
           Sign Up
         </button>
