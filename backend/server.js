@@ -28,12 +28,12 @@ app.post("/login", (req, res) => {
   db.query(sql, [username, password], (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: "Login failed" });
+      return res.status(500).json({ sucess: false, error: "Login failed" });
     }
     if (results.length > 0) {
-      res.status(200).json({ message: "Login successful" });
+      res.status(200).json({ success: true, message: "Login successful" });
     } else {
-      res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ success: false, error: "Invalid credentials" });
     }
   });
 });

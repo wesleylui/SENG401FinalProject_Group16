@@ -1,22 +1,40 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // login error msg
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("logging in with: ", { username, password });
-    // maybe API call for authentication?
+    try {
+      const response = await axios.post("http://localhost:5000/login", {
+        username,
+        password,
+      });
+
+      if (response.data.success) {
+        console.log("login successful:", response.data);
+        navigate("/main"); // redirect to main page
+      } else {
+        setError("Invalid username or password");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Error logging in. Please try again.");
+    }
   };
 
   return (
     <div className="bg-white text-black p-6 rounded shadow-lg">
       <h2 className="text-xl font-bold text-center mb-4">Login</h2>
+      {error && <p className="text-red-500 mb-3">{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
+          type="text"
           className="border p-2 w-full mb-3 rounded bg-white text-black"
           placeholder="Username"
           value={username}
