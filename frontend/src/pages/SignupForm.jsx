@@ -1,28 +1,46 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const SignupForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // for incorrect pw
+  const [message, setMessage] = useState(""); // for success message
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setMessage("");
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-    console.log("signing up with: ", { username, password });
+
+    try {
+      const response = await axios.post("http://localhost:5000/signup", {
+        username,
+        password,
+      });
+
+      setMessage(response.data.message);
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      setError(error.response?.data?.error || "Something went wrong");
+    }
   };
 
   return (
-    <div className="bg-white text-black p-6 rounded shadow-lg">
+    <div className="bg-white text-black p-6 rounded shadow-lg mb-4">
       <h2 className="text-xl font-bold text-center mb-4">Sign Up</h2>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
+          type="text"
           className="border p-2 w-full mb-3 rounded bg-white text-black"
           placeholder="Username"
           value={username}
