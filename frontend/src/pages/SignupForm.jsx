@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 import axios from "axios";
 
 const SignupForm = () => {
@@ -35,45 +36,48 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="bg-white text-black p-6 rounded shadow-lg mb-4">
-      <h2 className="text-xl font-bold text-center mb-4">Sign Up</h2>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className="border p-2 w-full mb-3 rounded bg-white text-black"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          className="border p-2 w-full mb-3 rounded bg-white text-black"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          className="border p-2 w-full mb-3 rounded bg-white text-black"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-black p-2 rounded w-full hover:bg-blue-600 transition"
-        >
-          Sign Up
-        </button>
-      </form>
+    <div>
+      <Header />
+      <div className="bg-white text-black p-6 rounded shadow-lg mb-4">
+        <h2 className="text-xl font-bold text-center mb-4">Sign Up</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="border p-2 w-full mb-3 rounded bg-white text-black"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            className="border p-2 w-full mb-3 rounded bg-white text-black"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <input
+            type="password"
+            className="border p-2 w-full mb-3 rounded bg-white text-black"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-black p-2 rounded w-full hover:bg-blue-600 transition"
+          >
+            Sign Up
+          </button>
+        </form>
 
-      <p className="text-center text-sm mt-3">
-        {"Already have an account?"}{" "}
-        <Link to="/" className="text-blue-500 cursor-pointer hover:underline">
-          Login
-        </Link>
-      </p>
+        <p className="text-center text-sm mt-3">
+          {"Already have an account?"}{" "}
+          <Link to="/" className="text-blue-500 cursor-pointer hover:underline">
+            Login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
