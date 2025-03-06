@@ -1,0 +1,23 @@
+{
+  "name": "seng401finalproject",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "server": "cd backend && node server.js",
+    "client": "cd frontend && npm run dev",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wesleylui/SENG401FinalProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wesleylui/SENG401FinalProject/issues"
+  },
+  "homepage": "https://github.com/wesleylui/SENG401FinalProject#readme"
+}
