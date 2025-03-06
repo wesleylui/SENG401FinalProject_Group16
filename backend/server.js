@@ -1,44 +1,14 @@
 const express = require("express");
 const cors = require("cors");
-const db = require("./db"); // Import MySQL connection
+const userController = require("./controllers/userController");
 
 const app = express();
-app.use(express.json()); // Parse JSON request bodies
-app.use(cors()); // Enable CORS for frontend requests
+app.use(express.json());
+app.use(cors());
 
-// User Signup API
-app.post("/signup", (req, res) => {
-  const { username, password } = req.body;
+app.post("/signup", userController.signup);
+app.post("/login", userController.login);
 
-  const sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-  db.query(sql, [username, password], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Signup failed" });
-    }
-    res.status(201).json({ message: "User created successfully" });
-  });
-});
-
-// User Login API
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  const sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-  db.query(sql, [username, password], (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ sucess: false, error: "Login failed" });
-    }
-    if (results.length > 0) {
-      res.status(200).json({ success: true, message: "Login successful" });
-    } else {
-      res.status(401).json({ success: false, error: "Invalid credentials" });
-    }
-  });
-});
-
-// Start the server
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
