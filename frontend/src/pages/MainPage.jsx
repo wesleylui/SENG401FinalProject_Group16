@@ -22,7 +22,7 @@ const MainPage = () => {
               </label>
               <textarea
                 id="story-description"
-                className="border p-2 w-full mt-2"
+                className="block p-2 w-full mt-2 h-40 border border-gray-400"
                 placeholder="Enter a sentence or two describing your story..."
                 value={storyDescription}
                 onChange={(e) => setStoryDescription(e.target.value)}
@@ -31,7 +31,7 @@ const MainPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="bg-indigo-500 text-black p-2 rounded w-full"
+              className="bg-white text-black p-6 border border-gray-400 rounded w-full mb-3"
             >
               Generate Story
             </button>
