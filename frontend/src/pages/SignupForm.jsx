@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ const SignupForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(""); // for incorrect pw
   const [message, setMessage] = useState(""); // for success message
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ const SignupForm = () => {
       setUsername("");
       setPassword("");
       setConfirmPassword("");
+      navigate("/main");
     } catch (error) {
       setError(error.response?.data?.error || "Something went wrong");
     }
