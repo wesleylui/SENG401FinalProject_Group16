@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // login error msg
   const navigate = useNavigate();
+  const { login, guestLogin } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +33,7 @@ const LoginForm = () => {
 
       if (response.data.success) {
         console.log("login successful:", response.data);
+        login();
         navigate("/main"); // redirect to main page
       } else {
         setError("Invalid username or password");
@@ -69,11 +72,15 @@ const LoginForm = () => {
             Login
           </button>
         </form>
-        <Link to="/main">
-          <button className="bg-gray-500 text-black p-2 rounded w-full mt-3 hover:bg-gray-600 transition">
-            Continue as Guest
-          </button>
-        </Link>
+        <button
+          className="bg-gray-500 text-black p-2 rounded w-full mt-3 hover:bg-gray-600 transition"
+          onClick={() => {
+            guestLogin();
+            navigate("/main");
+          }}
+        >
+          Continue as Guest
+        </button>
         <p className="text-center text-sm mt-3">
           {"Don't have an account?"}{" "}
           <Link

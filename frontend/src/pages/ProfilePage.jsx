@@ -1,7 +1,16 @@
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const ProfilePage = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <div>
       <Header />
@@ -12,9 +21,12 @@ const ProfilePage = () => {
 
       {/* Sign out button*/}
       <div className="text-center mt-5">
-        <Link to="/">
-          <button className="bg-red-500 text-black py-2 px-4 rounded hover:bg-red-600 transition duration-300">Sign out</button>
-        </Link>
+        <button
+          onClick={handleSignOut}
+          className="bg-red-500 text-black py-2 px-4 rounded hover:bg-red-600 transition duration-300"
+        >
+          Sign out
+        </button>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const SignupForm = () => {
   const [username, setUsername] = useState("");
@@ -10,6 +11,7 @@ const SignupForm = () => {
   const [error, setError] = useState(""); // for incorrect pw
   const [message, setMessage] = useState(""); // for success message
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +42,7 @@ const SignupForm = () => {
       setUsername("");
       setPassword("");
       setConfirmPassword("");
+      login();
       navigate("/main");
     } catch (error) {
       setError(error.response?.data?.error || "Something went wrong");
