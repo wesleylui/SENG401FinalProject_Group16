@@ -16,8 +16,17 @@ const SignupForm = () => {
     setError("");
     setMessage("");
 
+    // Error checking
+    if (!username) {
+      setError("Username cannot be empty");
+      return;
+    }
+    if (!password) {
+      setError("Password cannot be empty");
+      return;
+    }
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError("Passwords do not match");
       return;
     }
 

@@ -11,6 +11,18 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    // Error checking
+    if (!username) {
+      setError("Username cannot be empty");
+      return;
+    }
+    if (!password) {
+      setError("Password cannot be empty");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:5000/login", {
         username,
