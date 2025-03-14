@@ -24,4 +24,24 @@ const findUser = (username, password) => {
   });
 };
 
-module.exports = { createUser, findUser };
+// Function to initialize the database
+const initializeDatabase = () => {
+  const sql = `
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(255) NOT NULL UNIQUE,
+      password VARCHAR(255) NOT NULL,
+      bedtimeStory TEXT
+    )
+  `;
+  return new Promise((resolve, reject) => {
+    db.query(sql, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(result);
+    });
+  });
+};
+
+module.exports = { createUser, findUser, initializeDatabase };
