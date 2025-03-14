@@ -7,7 +7,7 @@ const signup = async (req, res) => {
     const result = await userService.signup(username, password);
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Signup error:", error); // Add detailed error logging
     res.status(500).json({ error: "Signup failed" });
   }
 };
@@ -23,7 +23,7 @@ const login = async (req, res) => {
       res.status(401).json({ success: false, error: "Invalid credentials" });
     }
   } catch (error) {
-    console.error(error);
+    console.error("Login error:", error); // Add detailed error logging
     res.status(500).json({ success: false, error: "Login failed" });
   }
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { process } from "react-scripts";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
@@ -33,10 +34,13 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5001/signup", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}`,
+        {
+          username,
+          password,
+        }
+      );
 
       setMessage(response.data.message);
       setUsername("");

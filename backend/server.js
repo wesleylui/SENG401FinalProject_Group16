@@ -7,7 +7,13 @@ require("dotenv").config(); // load .env variables
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// Configure CORS to accept requests from your deployed frontend
+const corsOptions = {
+  origin: "https://gilded-cascaron-a8f00f.netlify.app", // Replace with your deployed frontend domain
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Use DATABASE_URL from environment variables
 const mysqlConnection = mysql.createConnection(process.env.DATABASE_URL);
