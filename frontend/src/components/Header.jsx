@@ -4,7 +4,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
-  const { isAuthenticated, isGuest, logout } = useAuth();
+  const { isAuthenticated, isGuest, logout, userId } = useAuth();
   const location = useLocation();
 
   return (
@@ -21,7 +21,7 @@ const Header = () => {
               </button>
             </Link>
             {!isGuest && (
-              <Link to="/saved-stories">
+              <Link to={`/stories/${userId}`}>
                 <button className="text-black p-2 rounded w-full mt-3 hover transition ml-4">
                   View Saved Stories
                 </button>

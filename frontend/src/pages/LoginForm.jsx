@@ -40,8 +40,10 @@ const LoginForm = () => {
 
       if (response.data.success) {
         console.log("login successful:", response.data);
-        login();
-        navigate("/main"); // redirect to main page
+        console.log("userId from response:", response.data.userId); // Log userId from response
+        console.log("username from response:", response.data.username); // Log username from response
+        login(response.data.userId, response.data.username); // Pass userId and username to login function
+        navigate("/main");
       } else {
         setError("Invalid username or password");
       }

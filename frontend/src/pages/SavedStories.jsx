@@ -1,26 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
+import { useAuth } from "../context/AuthContext";
 
 const SavedStories = () => {
-  const [stories, setStories] = useState([
-    {
-      id: 1,
-      title: "Story 1",
-      summary: "Summary of story 1",
-      content: "Full content of story 1",
-    },
-    {
-      id: 2,
-      title: "Story 2",
-      summary: "Summary of story 2",
-      content: "Full content of story 2",
-    },
-    // Add more stories here
-  ]);
-
+  const { userId } = useAuth();
+  const [stories, setStories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedStory, setSelectedStory] = useState(null);
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5050/stories/${userId}`);
+        setStories(response.data);
+      } catch (error) {
+        console.error("Error fetching stories:", error);
+      }
+    };
+
+    fetchStories();
+  }, [userId]);
 
   const handleCardClick = (story) => {
     setSelectedStory(story);
@@ -45,6 +46,7 @@ const SavedStories = () => {
               onClick={() => handleCardClick(story)}
             >
               <h3 className="text-xl font-bold mb-2">{story.title}</h3>
+              <h3 className="text-xl font-bold mb-2">{story.genre}</h3>
               <p>{story.summary}</p>
             </div>
           ))}
@@ -53,7 +55,7 @@ const SavedStories = () => {
       <Modal
         show={showModal}
         onClose={handleCloseModal}
-        content={selectedStory?.content}
+        content={selectedStory?.story}
       />
     </div>
   );
