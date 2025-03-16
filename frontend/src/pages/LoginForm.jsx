@@ -1,5 +1,4 @@
 import { useState } from "react";
-import process from "process";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
@@ -27,10 +26,17 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/`,
-        { username, password }
-      );
+      // local version
+      const response = await axios.post("http://localhost:5000/login", {
+        username,
+        password,
+      });
+
+      // for deployment version
+      // const response = await axios.post(
+      //   `${process.env.REACT_APP_BACKEND_URL}/`,
+      //   { username, password }
+      // );
 
       if (response.data.success) {
         console.log("login successful:", response.data);

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { process } from "react-scripts";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
@@ -34,13 +33,20 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/signup`,
-        {
-          username,
-          password,
-        }
-      );
+      // local version
+      const response = await axios.post("http://localhost:5000/signup", {
+        username,
+        password,
+      });
+
+      // deployment version
+      // const response = await axios.post(
+      //   `${process.env.REACT_APP_BACKEND_URL}/signup`,
+      //   {
+      //     username,
+      //     password,
+      //   }
+      // );
 
       setMessage(response.data.message);
       setUsername("");
