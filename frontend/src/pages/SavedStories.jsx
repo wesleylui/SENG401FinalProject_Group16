@@ -42,12 +42,11 @@ const SavedStories = () => {
           {stories.map((story) => (
             <div
               key={story.id}
-              className="bg-white p-6 rounded shadow-lg cursor-pointer h-72 w-96"
+              className="bg-white p-6 pt-8 rounded shadow-lg cursor-pointer w-96"
               onClick={() => handleCardClick(story)}
             >
-              <h3 className="text-xl font-bold mb-2">{story.title}</h3>
-              <h3 className="text-xl font-bold mb-2">{story.genre}</h3>
-              <p>{story.summary}</p>
+              <h3 className="text-2xl font-bold mb-1">{story.title}</h3>
+              <h4 className="text-lg text-gray-600 mb-2">{story.genre}</h4>
             </div>
           ))}
         </div>
@@ -55,7 +54,9 @@ const SavedStories = () => {
       <Modal
         show={showModal}
         onClose={handleCloseModal}
-        content={selectedStory?.story}
+        story={selectedStory?.story}
+        title={selectedStory?.title}
+        genre={selectedStory?.genre}
       />
     </div>
   );
