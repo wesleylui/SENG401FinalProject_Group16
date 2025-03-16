@@ -5,7 +5,7 @@ require("dotenv").config(); // load .env variables
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "", // no pw. may have to change your sql pw (ask wesley)
+  password: process.env.DB_PASSWORD, // no pw. may have to change your sql pw (ask wesley)
   database: "story_gen", // db is called story_gen
 });
 

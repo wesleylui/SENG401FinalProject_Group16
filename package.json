@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-     "server": "cd backend && node server.js",
+    "server": "cd backend && node server.js",
     "client": "cd frontend && npm run dev",
     "start": "concurrently \"npm run server\" \"npm run client\""
   },
@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/wesleylui/SENG401FinalProject/issues"
   },
-  "homepage": "https://github.com/wesleylui/SENG401FinalProject#readme"
+  "homepage": "https://github.com/wesleylui/SENG401FinalProject#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "concurrently": "^9.1.2"
+  }
 }

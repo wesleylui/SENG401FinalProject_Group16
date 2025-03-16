@@ -27,7 +27,7 @@ const LoginForm = () => {
 
     try {
       // local version
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("http://localhost:5050/login", {
         username,
         password,
       });
