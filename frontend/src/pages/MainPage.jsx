@@ -21,6 +21,10 @@ const MainPage = () => {
       setError("Story prompt cannot be empty");
       return;
     }
+    if (!storyLength) {
+      setError("Please select a story length");
+      return;
+    }
 
     console.log("Generating story with description:", prompt);
     console.log("Selected story length:", storyLength);
@@ -29,7 +33,9 @@ const MainPage = () => {
     try {
       // local version
       const response = await axios.post("http://localhost:5050/generate", {
-        prompt
+        prompt,
+        storyLength,
+        storyGenre
       });
 
       // for deployment version
