@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const ProfilePage = () => {
-  const { logout } = useAuth();
+  const { logout, username } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = () => {
@@ -16,7 +16,7 @@ const ProfilePage = () => {
       <Header />
       <div className="profile-container">
         <h1>My Account</h1>
-        <h2>Username: </h2>
+        <h2>Username: {username}</h2> {/* Display the username */}
       </div>
 
       {/* Sign out button*/}

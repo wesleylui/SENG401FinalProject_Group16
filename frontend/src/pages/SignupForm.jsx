@@ -66,6 +66,7 @@ const SignupForm = () => {
         <h2 className="text-xl font-bold text-center mb-4">Sign Up</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
+          {/* Enter Username Text Field */}
           <input
             type="text"
             className="border p-2 w-full mb-3 rounded bg-white text-black"
@@ -73,6 +74,7 @@ const SignupForm = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          {/* Enter Passord Text Field */}
           <input
             type="password"
             className="border p-2 w-full mb-3 rounded bg-white text-black"
@@ -80,6 +82,7 @@ const SignupForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {/* Confirm Password Text Field */}
           <input
             type="password"
             className="border p-2 w-full mb-3 rounded bg-white text-black"
@@ -87,6 +90,7 @@ const SignupForm = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          {/* Sign up */}
           <button
             type="submit"
             className="bg-blue-500 text-black p-2 rounded w-full hover:bg-blue-600 transition"
@@ -95,6 +99,7 @@ const SignupForm = () => {
           </button>
         </form>
 
+        {/* Switch to LoginForm Link */}
         <p className="text-center text-sm mt-3">
           {"Already have an account?"}{" "}
           <Link to="/" className="text-blue-500 cursor-pointer hover:underline">

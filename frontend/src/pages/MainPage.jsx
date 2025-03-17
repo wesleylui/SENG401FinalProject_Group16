@@ -5,12 +5,11 @@ import StoryLengthSelector from "../components/StoryLengthSelector";
 import StoryGenreSelector from "../components/StoryGenreSelector";
 
 const MainPage = () => {
-  // const [storyDescription, setStoryDescription] = useState("");
   const [prompt, setPrompt] = useState("");
   const [storyLength, setStoryLength] = useState("");
   const [storyGenre, setStoryGenre] = useState("");
-  const [error, setError] = useState(""); // login error msg
-  const [story, setStory] = useState(""); // temporary story display
+  const [error, setError] = useState("");
+  const [story, setStory] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,10 +24,6 @@ const MainPage = () => {
       setError("Please select a story length");
       return;
     }
-
-    console.log("Generating story with description:", prompt);
-    console.log("Selected story length:", storyLength);
-    console.log("Selected story genre:", storyGenre);
 
     try {
       // local version
@@ -56,17 +51,22 @@ const MainPage = () => {
   return (
     <div>
       <Header />
-      <div className="pt-16"> {/* padding bw header and h1*/}
+      <div className="pt-16">
+        {" "}
+        {/* padding bw header and h1*/}
         <h1 className="text-3xl font-bold mb-6">Story Generator</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Length of Story Radio Buttons*/}
           <StoryLengthSelector
             storyLength={storyLength}
             setStoryLength={setStoryLength}
           />
+          {/* Genre of Story Radio Buttons*/}
           <StoryGenreSelector
             storyGenre={storyGenre}
             setStoryGenre={setStoryGenre}
           />
+          {/* Story Description Text Area */}
           <div>
             <label className="block text-lg font-medium mb-2">
               Describe your story
@@ -80,6 +80,7 @@ const MainPage = () => {
               onChange={(e) => setPrompt(e.target.value)}
             />
           </div>
+          {/* Generate Story Button */}
           <button
             type="submit"
             className="bg-white text-black p-6 border border-gray-400 rounded w-full"

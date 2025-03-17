@@ -40,8 +40,10 @@ const LoginForm = () => {
 
       if (response.data.success) {
         console.log("login successful:", response.data);
-        login();
-        navigate("/main"); // redirect to main page
+        console.log("userId from response:", response.data.userId); // Log userId from response
+        console.log("username from response:", response.data.username); // Log username from response
+        login(response.data.userId, response.data.username); // Pass userId and username to login function
+        navigate("/main");
       } else {
         setError("Invalid username or password");
       }
@@ -58,6 +60,7 @@ const LoginForm = () => {
         <h2 className="text-xl font-bold text-center mb-4">Login</h2>
         {error && <p className="text-red-500 mb-3">{error}</p>}
         <form onSubmit={handleSubmit}>
+          {/* Enter Username Text Field */}
           <input
             type="text"
             className="border p-2 w-full mb-3 rounded bg-white text-black"
@@ -65,6 +68,7 @@ const LoginForm = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          {/* Enter Password Text Field */}
           <input
             type="password"
             className="border p-2 w-full mb-3 rounded bg-white text-black"
@@ -72,6 +76,7 @@ const LoginForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {/* Login Button */}
           <button
             className="bg-blue-500 text-black p-2 rounded w-full hover:bg-blue-600 transition"
             type="submit"
@@ -79,6 +84,7 @@ const LoginForm = () => {
             Login
           </button>
         </form>
+        {/* Continue as Guest Button */}
         <button
           className="bg-gray-500 text-black p-2 rounded w-full mt-3 hover:bg-gray-600 transition"
           onClick={() => {
@@ -88,8 +94,9 @@ const LoginForm = () => {
         >
           Continue as Guest
         </button>
+
         <p className="text-center text-sm mt-3">
-          {"Don't have an account?"}{" "}
+          {"Don't have an account?"} {/* Switch to SignupForm Link */}
           <Link
             to="/signup"
             className="text-blue-500 cursor-pointer hover:underline"

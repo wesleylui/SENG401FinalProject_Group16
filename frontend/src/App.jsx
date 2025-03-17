@@ -14,7 +14,7 @@ const App = () => {
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/saved-stories" element={<SavedStories />} />
+        <Route path="/stories/:userId" element={<SavedStories />} />
       </Routes>
     </Router>
   );

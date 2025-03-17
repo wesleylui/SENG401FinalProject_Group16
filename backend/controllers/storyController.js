@@ -12,5 +12,16 @@ const generate = async (req, res) => {
   }
 };
 
+// get all stories for a userId
+const getStoriesByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const stories = await storyService.getStoriesByUserId(userId);
+    res.status(200).json(stories);
+  } catch (error) {
+    console.error("Error fetching stories:", error);
+    res.status(500).json({ error: "Failed to fetch stories" });
+  }
+};
 
-module.exports = { generate };
+module.exports = { generate, getStoriesByUserId };
