@@ -3,8 +3,8 @@ const storyService = require("../services/storyService");
 // Story generate API
 const generate = async (req, res) => {
   try {
-    const { prompt } = req.body;
-    const story = await storyService.generate(prompt);
+    const { prompt, storyLength, storyGenre } = req.body;
+    const story = await storyService.generate(prompt, storyLength, storyGenre);
     res.status(201).json({ story, message: "Story generated successfully" }); 
   } catch (error) {
     console.error("Story generation error:", error); // Add detailed error logging
