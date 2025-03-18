@@ -13,7 +13,9 @@ const SavedStories = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get(`http://localhost:5050/stories/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5050/stories/${userId}`
+        );
         setStories(response.data);
       } catch (error) {
         console.error("Error fetching stories:", error);
@@ -31,6 +33,12 @@ const SavedStories = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedStory(null);
+  };
+
+  const handleDeleteStory = (storyId) => {
+    setStories((prevStories) =>
+      prevStories.filter((story) => story.id !== storyId)
+    );
   };
 
   return (
@@ -58,6 +66,8 @@ const SavedStories = () => {
         genre={selectedStory?.genre}
         description={selectedStory?.description}
         story={selectedStory?.story}
+        storyId={selectedStory?.id}
+        onDelete={handleDeleteStory}
       />
     </div>
   );

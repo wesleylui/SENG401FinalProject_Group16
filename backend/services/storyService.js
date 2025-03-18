@@ -65,4 +65,14 @@ const saveStory = async (
   }
 };
 
-module.exports = { generate, getStoriesByUserId, saveStory };
+// delete existing story
+const deleteStoryById = async (id) => {
+  try {
+    return await storyRepository.deleteStoryById(id);
+  } catch (error) {
+    console.error("Error in deleteStoryById service:", error);
+    throw error;
+  }
+};
+
+module.exports = { generate, getStoriesByUserId, saveStory, deleteStoryById };
