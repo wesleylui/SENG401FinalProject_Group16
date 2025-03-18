@@ -82,7 +82,7 @@ const MainPage = () => {
         storyLength,
         storyGenre,
         storyDescription,
-        story: story.story,
+        story: story,
       };
 
       console.log("Saving story with payload:", payload); // Log the payload being sent
@@ -103,11 +103,6 @@ const MainPage = () => {
         {/* padding bw header and h1*/}
         <h1 className="text-3xl font-bold mb-6">Story Generator</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Story Title Input */}
-          <StoryTitleSelector
-            storyTitle={storyTitle}
-            setStoryTitle={setStoryTitle}
-          />
           {/* Length of Story Radio Buttons*/}
           <StoryLengthSelector
             storyLength={storyLength}
@@ -149,9 +144,13 @@ const MainPage = () => {
           <p className="text-blue-500 mb-3">{story}</p>
         </div>
       )}
-      {/* Save and Discard Story Buttons */}
+      {/* Save Discard and Change Story Buttons */}
       {story && (
         <div className="flex justify-end space-x-4 mt-4">
+          <StoryTitleSelector
+              storyTitle={storyTitle}
+              setStoryTitle={setStoryTitle}
+            />
           <button
             className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
             onClick={handleSave}
