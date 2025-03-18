@@ -43,6 +43,7 @@ app.post("/login", userController.login);
 app.post("/generate", storyController.generate);
 app.get("/stories/:userId", storyController.getStoriesByUserId);
 app.post("/save-story", storyController.saveStory);
+app.delete("/stories/:id", storyController.deleteStoryById);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

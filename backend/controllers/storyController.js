@@ -73,4 +73,15 @@ const saveStory = async (req, res) => {
   }
 };
 
-module.exports = { generate, getStoriesByUserId, saveStory };
+const deleteStoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await storyService.deleteStoryById(id);
+    res.status(200).json({ message: "Story deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting story:", error);
+    res.status(500).json({ error: "Failed to delete story" });
+  }
+};
+
+module.exports = { generate, getStoriesByUserId, saveStory, deleteStoryById };
