@@ -1,5 +1,5 @@
-import { createContext, useState, useContext } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
+import { createContext, useState, useContext, useEffect } from "react";
+import PropTypes from "prop-types";
 
 const AuthContext = createContext();
 
@@ -7,32 +7,52 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [username, setUsername] = useState(""); // Add username state
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setIsAuthenticated(true);
+      setUserId(storedUser.userId);
+      setUsername(storedUser.username);
+    }
+  }, []);
 
   const login = (id, username) => {
     setIsAuthenticated(true);
     setIsGuest(false);
-    setUserId(id); // Set the userId when logging in
-    setUsername(username); // Set the username when logging in
+    setUserId(id);
+    setUsername(username);
+    localStorage.setItem("user", JSON.stringify({ userId: id, username }));
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setIsGuest(false);
-    setUserId(null); // Clear the userId when logging out
-    setUsername(""); // Clear the username when logging out
+    setUserId(null);
+    setUsername("");
+    // Clear user data from localStorage
+    localStorage.removeItem("user");
   };
 
   const guestLogin = () => {
     setIsAuthenticated(true);
     setIsGuest(true);
-    setUserId(null); // No userId for guest login
-    setUsername(""); // Clear the username for guest login
+    setUserId(null);
+    setUsername("");
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, isGuest, login, logout, guestLogin, userId, username }}
+      value={{
+        isAuthenticated,
+        isGuest,
+        login,
+        logout,
+        guestLogin,
+        userId,
+        username,
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -40,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 };
 
 AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired, // Add PropTypes validation for children
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => useContext(AuthContext);

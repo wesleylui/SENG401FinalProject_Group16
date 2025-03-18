@@ -52,7 +52,7 @@ const SignupForm = () => {
       setUsername("");
       setPassword("");
       setConfirmPassword("");
-      login();
+      login(response.data.userId, response.data.username); // Pass userId and username to login function
       navigate("/main");
     } catch (error) {
       setError(error.response?.data?.error || "Something went wrong");
