@@ -7,7 +7,7 @@ const StoryLengthSelector = ({ storyLength, setStoryLength }) => {
       <div className="flex justify-center space-x-4">
         <label
           className={`px-4 py-2 border rounded cursor-pointer ${
-            storyLength === "50-100"
+            storyLength === "100"
               ? "bg-blue-500 text-white"
               : "bg-white text-black"
           }`}
@@ -15,16 +15,16 @@ const StoryLengthSelector = ({ storyLength, setStoryLength }) => {
           <input
             type="radio"
             name="storyLength"
-            value="50-100"
+            value="100"
             className="hidden"
-            checked={storyLength === "50-100"}
+            checked={storyLength === "100"}
             onChange={(e) => setStoryLength(e.target.value)}
           />
           50-100 words
         </label>
         <label
           className={`px-4 py-2 border rounded cursor-pointer ${
-            storyLength === "100-200"
+            storyLength === "200"
               ? "bg-blue-500 text-white"
               : "bg-white text-black"
           }`}
@@ -32,16 +32,16 @@ const StoryLengthSelector = ({ storyLength, setStoryLength }) => {
           <input
             type="radio"
             name="storyLength"
-            value="100-200"
+            value="200"
             className="hidden"
-            checked={storyLength === "100-200"}
+            checked={storyLength === "200"}
             onChange={(e) => setStoryLength(e.target.value)}
           />
           100-200 words
         </label>
         <label
           className={`px-4 py-2 border rounded cursor-pointer ${
-            storyLength === "200-300"
+            storyLength === "300"
               ? "bg-blue-500 text-white"
               : "bg-white text-black"
           }`}
@@ -49,9 +49,9 @@ const StoryLengthSelector = ({ storyLength, setStoryLength }) => {
           <input
             type="radio"
             name="storyLength"
-            value="200-300"
+            value="300"
             className="hidden"
-            checked={storyLength === "200-300"}
+            checked={storyLength === "300"}
             onChange={(e) => setStoryLength(e.target.value)}
           />
           200-300 words
