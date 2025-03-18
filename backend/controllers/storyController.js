@@ -3,19 +3,18 @@ const storyService = require("../services/storyService");
 // Story generate API
 const generate = async (req, res) => {
   try {
-    const { storyTitle, storyLength, storyGenre, storyDescription } = req.body;
+    const { storyLength, storyGenre, storyDescription } = req.body;
     console.log("Received payload in generate:", req.body);
 
-    const story = await storyService.generate(
-      storyTitle,
+    const { storyTitle, story } = await storyService.generate(
       storyLength,
       storyGenre,
       storyDescription
     );
 
-    console.log("Generated story:", story);
+    console.log(`Generated story: ${storyTitle}\n${story}`);
 
-    res.status(201).json({ story });
+    res.status(201).json({ storyTitle, story });
   } catch (error) {
     console.error("Story generation error:", error);
     res.status(500).json({ error: "Story generation failed" });
