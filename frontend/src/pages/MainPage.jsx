@@ -20,9 +20,9 @@ const MainPage = () => {
     setError("");
 
     // Error checking
-    if (!storyTitle || !storyGenre || !storyLength || !storyDescription) {
+    if (!storyGenre || !storyLength || !storyDescription) {
       setError(
-        "All fields (title, genre, length, and description) are required"
+        "All fields (genre, length, and description) are required"
       );
       return;
     }
@@ -42,13 +42,14 @@ const MainPage = () => {
 
     try {
       const response = await axios.post("http://localhost:5050/generate", {
-        storyTitle,
         storyLength,
         storyGenre,
         storyDescription,
       });
 
-      const story = response.data;
+      const storyTitle = response.data.storyTitle;
+      const story = response.data.story;
+      setStoryTitle(storyTitle);
       setStory(story);
     } catch (err) {
       console.error("Story generation error:", err);
@@ -62,11 +63,12 @@ const MainPage = () => {
     setStoryLength("");
     setStoryGenre("");
     setStory("");
+    setStoryTitle("");
   };
 
   // saving story to db
   const handleSave = async () => {
-    if (!storyTitle || !storyGenre || !storyDescription || !story?.story) {
+    if (!storyTitle || !storyGenre || !storyDescription || !story) {
       alert(
         "Title, genre, description, and story are required to save the story."
       );
@@ -144,7 +146,7 @@ const MainPage = () => {
         <div className="mt-6">
           <h2 className="text-2xl font-bold text-gray-800">{storyTitle}</h2>
           <p className="text-lg text-gray-600 mb-4">Genre: {storyGenre}</p>
-          <p className="text-blue-500 mb-3">{story.story}</p>
+          <p className="text-blue-500 mb-3">{story}</p>
         </div>
       )}
       {/* Save and Discard Story Buttons */}
