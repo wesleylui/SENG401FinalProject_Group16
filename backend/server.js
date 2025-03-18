@@ -18,25 +18,25 @@ app.use(cors());
 // app.use(cors(corsOptions));
 
 // Use DATABASE_URL from environment variables
-// const mysqlConnection = mysql.createConnection(process.env.DATABASE_URL);
+const mysqlConnection = mysql.createConnection(process.env.DATABASE_URL);
 
-// mysqlConnection.connect((err) => {
-//   if (err) {
-//     console.error("❌ Database connection failed (server.js):", err.stack);
-//     return;
-//   }
-//   console.log("✅ Connected to the MySQL database! (server.js)");
+mysqlConnection.connect((err) => {
+  if (err) {
+    console.error("❌ Database connection failed (server.js):", err.stack);
+    return;
+  }
+  console.log("✅ Connected to the MySQL database! (server.js)");
 
   // Initialize the database
-//   userRepository
-//     .initializeDatabase()
-//     .then(() => {
-//       console.log("✅ Database initialized!");
-//     })
-//     .catch((err) => {
-//       console.error("❌ Database initialization failed:", err);
-//     });
-// });
+  userRepository
+    .initializeDatabase()
+    .then(() => {
+      console.log("✅ Database initialized!");
+    })
+    .catch((err) => {
+      console.error("❌ Database initialization failed:", err);
+    });
+});
 
 app.post("/signup", userController.signup);
 app.post("/login", userController.login);
@@ -45,7 +45,7 @@ app.get("/stories/:userId", storyController.getStoriesByUserId);
 app.post("/save-story", storyController.saveStory);
 app.delete("/stories/:id", storyController.deleteStoryById);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5050; // Use Railway's assigned port or default to 5050
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

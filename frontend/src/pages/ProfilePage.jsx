@@ -1,13 +1,13 @@
 import Header from "../components/Header";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const ProfilePage = () => {
-  const { logout, username } = useAuth();
+  const { logout, username, isGuest } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    logout();
+    logout(); // logout deauthenticates, and resets isGuest, userId, and username
     navigate("/");
   };
 
@@ -16,7 +16,7 @@ const ProfilePage = () => {
       <Header />
       <div className="profile-container">
         <h1>My Account</h1>
-        <h2>Username: {username}</h2> {/* Display the username */}
+        <h2>Username: {isGuest ? "Guest" : username}</h2>
       </div>
 
       {/* Sign out button*/}
