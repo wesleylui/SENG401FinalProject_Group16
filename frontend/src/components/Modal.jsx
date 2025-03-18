@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-const Modal = ({ show, onClose, story, title, genre }) => {
+const Modal = ({ show, onClose, title, genre, description, story }) => {
   if (!show) {
     return null;
   }
@@ -16,10 +16,11 @@ const Modal = ({ show, onClose, story, title, genre }) => {
             <span className="font-bold text-xl">{title}</span>
             <span className="text-lg text-gray-600">{genre}</span>
           </div>
+          <p className="mb-4">{description}</p> {/* Display description */}
           <textarea
             className="w-full h-auto max-h-96 p-2 border border-gray-300 rounded resize-none"
             readOnly
-            value={story}
+            value={story} // Display story
           />
         </div>
       </div>
@@ -30,9 +31,10 @@ const Modal = ({ show, onClose, story, title, genre }) => {
 Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  story: PropTypes.string,
   title: PropTypes.string,
   genre: PropTypes.string,
+  description: PropTypes.string,
+  story: PropTypes.string,
 };
 
 export default Modal;

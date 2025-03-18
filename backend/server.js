@@ -42,6 +42,7 @@ app.post("/signup", userController.signup);
 app.post("/login", userController.login);
 app.post("/generate", storyController.generate);
 app.get("/stories/:userId", storyController.getStoriesByUserId);
+app.post("/save-story", storyController.saveStory);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

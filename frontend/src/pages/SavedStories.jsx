@@ -54,9 +54,10 @@ const SavedStories = () => {
       <Modal
         show={showModal}
         onClose={handleCloseModal}
-        story={selectedStory?.story}
         title={selectedStory?.title}
         genre={selectedStory?.genre}
+        description={selectedStory?.description}
+        story={selectedStory?.story}
       />
     </div>
   );
