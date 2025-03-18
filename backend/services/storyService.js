@@ -15,7 +15,7 @@ const generate = async (
   storyGenre,
   storyDescription
 ) => {
-  const modified_prompt = `Write a ${storyLength} word story in a ${storyGenre} style titled "${storyTitle}" based on the following description: "${storyDescription}". Respond with only the story.`;
+  const modified_prompt = `Write an up to ${storyLength} word story in a ${storyGenre} style titled "${storyTitle}" based on the following description: "${storyDescription}". Respond with only the story.`;
   console.log("Sending prompt to Gemini API:", modified_prompt);
 
   try {
