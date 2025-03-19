@@ -2,15 +2,15 @@ const mysql = require("mysql2");
 require("dotenv").config(); // load .env variables
 
 // Create a MySQL connection (locally)
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: process.env.DB_PASSWORD, // no pw. may have to change your sql pw (ask wesley)
-  database: "story_gen", // db is called story_gen
-});
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: process.env.DB_PASSWORD, // no pw. may have to change your sql pw (ask wesley)
+//   database: "story_gen", // db is called story_gen
+// });
 
 // create MYSQL connection using Railway database URL
-// const db = mysql.createConnection(process.env.DATABASE_URL);
+const db = mysql.createConnection(process.env.DATABASE_URL);
 
 // Connect to MySQL
 db.connect((err) => {

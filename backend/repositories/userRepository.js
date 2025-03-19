@@ -29,25 +29,16 @@ const findUser = (username, password) => {
 
 // Function to initialize the database
 const initializeDatabase = () => {
+  const env = process.env.ENV; // Get the environment variable
   const sql = `
+    ${env === "deployment" ? "DROP TABLE IF EXISTS users;" : ""}
     CREATE TABLE IF NOT EXISTS users (
       id INT AUTO_INCREMENT PRIMARY KEY,
       username VARCHAR(255) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL
-    )
-    
-    CREATE TABLE IF NOT EXISTS stories (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      user_id INT NOT NULL,
-      title VARCHAR(255) NOT NULL,
-      length INT NOT NULL,
-      genre VARCHAR(177) NOT NULL,
-      description TEXT NOT NULL,
-      content TEXT NOT NULL, -- Changed from VARCHAR(1027) to TEXT for flexibility
-      CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )
+    );
+    ${env === "deployment" ? "INSERT INTO users (username, password) VALUES ('admin', 'pw');" : ""}
   `;
-  // THIS INIT OF STORIES TABLE IS DIFFERENT TO LUKE's SCREENSHOT FROM DISCORD
 
   return new Promise((resolve, reject) => {
     db.query(sql, (err, result) => {
