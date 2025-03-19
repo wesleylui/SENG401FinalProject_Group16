@@ -31,11 +31,15 @@ const findUser = (username, password) => {
 const initializeDatabase = async () => {
   const env = process.env.ENV; // Get the environment variable
 
-  const dropTableSQL = `
+  const dropStoriesTableSQL = `
+    DROP TABLE IF EXISTS stories;
+  `;
+
+  const dropUsersTableSQL = `
     DROP TABLE IF EXISTS users;
   `;
 
-  const createTableSQL = `
+  const createUsersTableSQL = `
     CREATE TABLE IF NOT EXISTS users (
       id INT AUTO_INCREMENT PRIMARY KEY,
       username VARCHAR(255) NOT NULL UNIQUE,
@@ -49,21 +53,32 @@ const initializeDatabase = async () => {
 
   try {
     if (env === "deployment") {
+      // Drop the stories table first to remove the foreign key constraint
       await new Promise((resolve, reject) => {
-        db.query(dropTableSQL, (err, result) => {
+        db.query(dropStoriesTableSQL, (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      });
+
+      // Then drop the users table
+      await new Promise((resolve, reject) => {
+        db.query(dropUsersTableSQL, (err, result) => {
           if (err) return reject(err);
           resolve(result);
         });
       });
     }
 
+    // Create the users table
     await new Promise((resolve, reject) => {
-      db.query(createTableSQL, (err, result) => {
+      db.query(createUsersTableSQL, (err, result) => {
         if (err) return reject(err);
         resolve(result);
       });
     });
 
+    // Insert the admin user
     await new Promise((resolve, reject) => {
       db.query(insertAdminSQL, (err, result) => {
         if (err) return reject(err);
