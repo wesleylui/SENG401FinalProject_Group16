@@ -8,7 +8,7 @@ const Modal = ({ show, onClose, title, genre, description, story, storyId, onDel
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5050/stories/${storyId}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/stories/${storyId}`);
       alert("Story deleted successfully!");
       onDelete(storyId); // Notify parent component about deletion
       onClose(); // Close the modal

@@ -41,7 +41,7 @@ const SignupForm = () => {
 
       // deployment version
       const response = await axios.post(
-        `story-bedtime-generator.up.railway.app/signup`,
+        `${import.meta.env.VITE_BACKEND_URL}/signup`,
         {
           username,
           password,

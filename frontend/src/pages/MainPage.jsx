@@ -41,11 +41,14 @@ const MainPage = () => {
     */
 
     try {
-      const response = await axios.post("http://localhost:5050/generate", {
-        storyLength,
-        storyGenre,
-        storyDescription,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/generate`,
+        {
+          storyLength,
+          storyGenre,
+          storyDescription,
+        }
+      );
 
       const storyTitle = response.data.storyTitle;
       const story = response.data.story;
@@ -87,7 +90,10 @@ const MainPage = () => {
 
       console.log("Saving story with payload:", payload); // Log the payload being sent
 
-      await axios.post("http://localhost:5050/save-story", payload);
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/save-story`,
+        payload
+      );
       alert("Story saved successfully!");
     } catch (err) {
       console.error("Error saving story:", err.response?.data || err);

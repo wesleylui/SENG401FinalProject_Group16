@@ -28,7 +28,7 @@ const findUser = (username, password) => {
 };
 
 // Function to initialize the database
-const initializeDatabase = () => {
+const initializeDatabase = async () => {
   const env = process.env.ENV; // Get the environment variable
   const sql = `
     ${env === "deployment" ? "DROP TABLE IF EXISTS users;" : ""}
@@ -37,17 +37,20 @@ const initializeDatabase = () => {
       username VARCHAR(255) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL
     );
-    ${env === "deployment" ? "INSERT INTO users (username, password) VALUES ('admin', 'pw');" : ""}
+    ${env === "deployment" ? "INSERT IGNORE INTO users (username, password) VALUES ('admin', 'pw');" : ""}
   `;
 
-  return new Promise((resolve, reject) => {
-    db.query(sql, (err, result) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(result);
+  try {
+    await new Promise((resolve, reject) => {
+      db.query(sql, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
     });
-  });
+  } catch (error) {
+    console.error("Error initializing users table:", error);
+    throw error;
+  }
 };
 
 module.exports = { createUser, findUser, initializeDatabase };

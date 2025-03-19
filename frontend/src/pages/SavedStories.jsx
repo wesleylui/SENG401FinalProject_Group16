@@ -14,7 +14,7 @@ const SavedStories = () => {
     const fetchStories = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5050/stories/${userId}`
+          `${import.meta.env.VITE_BACKEND_URL}/stories/${userId}`
         );
         setStories(response.data);
       } catch (error) {
@@ -35,10 +35,17 @@ const SavedStories = () => {
     setSelectedStory(null);
   };
 
-  const handleDeleteStory = (storyId) => {
-    setStories((prevStories) =>
-      prevStories.filter((story) => story.id !== storyId)
-    );
+  const handleDeleteStory = async (storyId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/stories/${storyId}`
+      );
+      setStories((prevStories) =>
+        prevStories.filter((story) => story.id !== storyId)
+      );
+    } catch (error) {
+      console.error("Error deleting story:", error);
+    }
   };
 
   return (

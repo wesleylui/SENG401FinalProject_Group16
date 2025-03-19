@@ -27,10 +27,13 @@ const LoginForm = () => {
 
     try {
       // local version
-      const response = await axios.post("http://localhost:5050/login", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/login`,
+        {
+          username,
+          password,
+        }
+      );
 
       // for deployment version
       // const response = await axios.post(
