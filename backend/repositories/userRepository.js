@@ -15,13 +15,15 @@ const createUser = (username, password) => {
 
 // findUser for login functionality
 const findUser = (username, password) => {
-  const sql =
-    "SELECT id, username FROM users WHERE username = ? AND password = ?";
+  const sql = "SELECT id, username FROM users WHERE username = ? AND password = ?";
+  console.log("Executing SQL query:", sql, [username, password]); // Log query and parameters
   return new Promise((resolve, reject) => {
     db.query(sql, [username, password], (err, results) => {
       if (err) {
+        console.error("Database error in findUser:", err);
         return reject(err);
       }
+      console.log("Query results:", results); // Log query results
       resolve(results.length > 0 ? results[0] : null); // Return user object including id and username
     });
   });
