@@ -30,19 +30,42 @@ const findUser = (username, password) => {
 // Function to initialize the database
 const initializeDatabase = async () => {
   const env = process.env.ENV; // Get the environment variable
-  const sql = `
-    ${env === "deployment" ? "DROP TABLE IF EXISTS users;" : ""}
+
+  const dropTableSQL = `
+    DROP TABLE IF EXISTS users;
+  `;
+
+  const createTableSQL = `
     CREATE TABLE IF NOT EXISTS users (
       id INT AUTO_INCREMENT PRIMARY KEY,
       username VARCHAR(255) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL
     );
+  `;
+
+  const insertAdminSQL = `
     INSERT IGNORE INTO users (username, password) VALUES ('admin', 'pw');
   `;
 
   try {
+    if (env === "deployment") {
+      await new Promise((resolve, reject) => {
+        db.query(dropTableSQL, (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      });
+    }
+
     await new Promise((resolve, reject) => {
-      db.query(sql, (err, result) => {
+      db.query(createTableSQL, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      db.query(insertAdminSQL, (err, result) => {
         if (err) return reject(err);
         resolve(result);
       });
