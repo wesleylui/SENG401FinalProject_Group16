@@ -34,19 +34,19 @@ const SignupForm = () => {
 
     try {
       // local version
-      const response = await axios.post("http://localhost:5050/signup", {
-        username,
-        password,
-      });
+      // const response = await axios.post("http://localhost:5050/signup", {
+      //   username,
+      //   password,
+      // });
 
       // deployment version
-      // const response = await axios.post(
-      //   `${process.env.REACT_APP_BACKEND_URL}/signup`,
-      //   {
-      //     username,
-      //     password,
-      //   }
-      // );
+      const response = await axios.post(
+        `story-bedtime-generator.up.railway.app/signup`,
+        {
+          username,
+          password,
+        }
+      );
 
       setMessage(response.data.message);
       setUsername("");
