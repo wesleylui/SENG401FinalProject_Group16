@@ -31,6 +31,14 @@ const findUser = (username, password) => {
 const initializeDatabase = async () => {
   const env = process.env.ENV; // Get the environment variable
 
+  const disableForeignKeyChecksSQL = `
+    SET FOREIGN_KEY_CHECKS = 0;
+  `;
+
+  const enableForeignKeyChecksSQL = `
+    SET FOREIGN_KEY_CHECKS = 1;
+  `;
+
   const dropStoriesTableSQL = `
     DROP TABLE IF EXISTS stories;
   `;
@@ -53,6 +61,14 @@ const initializeDatabase = async () => {
 
   try {
     if (env === "deployment") {
+      // Disable foreign key checks
+      await new Promise((resolve, reject) => {
+        db.query(disableForeignKeyChecksSQL, (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      });
+
       // Drop the stories table first to remove the foreign key constraint
       await new Promise((resolve, reject) => {
         db.query(dropStoriesTableSQL, (err, result) => {
@@ -64,6 +80,14 @@ const initializeDatabase = async () => {
       // Then drop the users table
       await new Promise((resolve, reject) => {
         db.query(dropUsersTableSQL, (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      });
+
+      // Re-enable foreign key checks
+      await new Promise((resolve, reject) => {
+        db.query(enableForeignKeyChecksSQL, (err, result) => {
           if (err) return reject(err);
           resolve(result);
         });
