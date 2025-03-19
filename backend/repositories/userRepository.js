@@ -37,7 +37,7 @@ const initializeDatabase = async () => {
       username VARCHAR(255) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL
     );
-    ${env === "deployment" ? "INSERT IGNORE INTO users (username, password) VALUES ('admin', 'pw');" : ""}
+    INSERT IGNORE INTO users (username, password) VALUES ('admin', 'pw');
   `;
 
   try {
