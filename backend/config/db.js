@@ -9,8 +9,6 @@ const db = mysql.createConnection({
   database: "story_gen", // db is called story_gen
 });
 
-console.log("Connecting to:", process.env.DATABASE_URL); // Mask password
-
 // create MYSQL connection using Railway database URL
 // const db = mysql.createConnection(process.env.DATABASE_URL);
 
