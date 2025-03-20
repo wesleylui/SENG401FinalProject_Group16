@@ -8,12 +8,7 @@ require("dotenv").config(); // load .env variables
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: "https://story-bedtime-generator.netlify.app", // Allow requests from your frontend
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific HTTP methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
-  credentials: true, // Allow cookies if needed
-}));
+app.use(cors()); // allow all origins for debugging (not good for production)
 
 // Initialize the database
 Promise.all([
