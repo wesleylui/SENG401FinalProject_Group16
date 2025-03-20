@@ -10,11 +10,13 @@ const app = express();
 app.use(express.json());
 
 // ✅ Allow all origins for debugging (remove * in production)
-app.use(cors({
-  origin: "*", // Replace "*" with specific origin in production
-  methods: "GET,POST,PUT,DELETE,OPTIONS",
-  allowedHeaders: "Content-Type,Authorization",
-}));
+app.use(
+  cors({
+    origin: "*", // Replace "*" with specific origin in production
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
 
 // ✅ Explicitly handle preflight requests
 app.options("*", (req, res) => {
@@ -53,6 +55,6 @@ app.post("/save-story", storyController.saveStory);
 app.delete("/stories/:id", storyController.deleteStoryById);
 
 const PORT = process.env.PORT || 5050;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on ${PORT}`);
-});
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`🚀 Server running on port ${PORT}`)
+);
