@@ -21,18 +21,26 @@ const MainPage = () => {
 
     // Error checking
     if (!storyGenre || !storyLength || !storyDescription) {
-      setError(
-        "All fields (genre, length, and description) are required"
-      );
+      setError("All fields (genre, length, and description) are required");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:5050/generate", {
-        storyLength,
-        storyGenre,
-        storyDescription,
-      });
+      // local version
+      // const response = await axios.post("http://localhost:5050/generate", {
+      //   storyLength,
+      //   storyGenre,
+      //   storyDescription,
+      // });
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/generate`,
+        {
+          storyLength,
+          storyGenre,
+          storyDescription,
+        }
+      );
 
       const storyTitle = response.data.storyTitle;
       const story = response.data.story;
@@ -74,7 +82,12 @@ const MainPage = () => {
 
       console.log("Saving story with payload:", payload); // Log the payload being sent
 
-      await axios.post("http://localhost:5050/save-story", payload);
+      // local version
+      // await axios.post("http://localhost:5050/save-story", payload);
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/save-story`,
+        payload
+      );
       alert("Story saved successfully!");
     } catch (err) {
       console.error("Error saving story:", err.response?.data || err);
@@ -85,9 +98,10 @@ const MainPage = () => {
   return (
     <div>
       <Header />
-      <h1 className="text-3xl font-bold md:mb-6 sm:mt-20 md:mt-0">Story Generator</h1>
+      <h1 className="text-3xl font-bold md:mb-6 sm:mt-20 md:mt-0">
+        Story Generator
+      </h1>
       <div className="flex sm:flex-col md:flex-row gap-10">
-
         <div className="flex flex-shrink justify-center pt-12">
           {/* padding bw header and h1*/}
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -125,13 +139,23 @@ const MainPage = () => {
           </form>
         </div>
 
-        <div className="flex-1 flex-col"> {/* Story section */}
-          <div className={`transition-all duration-700 ease-in-out ${story ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+        <div className="flex-1 flex-col">
+          {" "}
+          {/* Story section */}
+          <div
+            className={`transition-all duration-700 ease-in-out ${
+              story ? "opacity-100 scale-100" : "opacity-0 scale-90"
+            }`}
+          >
             {/* Generated Story Response Text */}
             {story && (
               <div className="mt-6">
-                <h2 className="text-2xl font-bold text-gray-800">{storyTitle}</h2>
-                <p className="text-lg text-gray-600 mb-4">Genre: {storyGenre}</p>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {storyTitle}
+                </h2>
+                <p className="text-lg text-gray-600 mb-4">
+                  Genre: {storyGenre}
+                </p>
                 <p className="text-blue-500 mb-3">{story}</p>
               </div>
             )}
@@ -139,20 +163,20 @@ const MainPage = () => {
             {story && (
               <div className="flex sm:flex-col md:flex-row justify-center space-x-4 mt-4">
                 <StoryTitleSelector
-                    storyTitle={storyTitle}
-                    setStoryTitle={setStoryTitle}
-                    />
+                  storyTitle={storyTitle}
+                  setStoryTitle={setStoryTitle}
+                />
                 <div className="flex justify-center space-x-4 mt-4">
                   <button
                     className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
                     onClick={handleSave}
-                    >
+                  >
                     Save Story
                   </button>
                   <button
                     className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
                     onClick={handleDiscard}
-                    >
+                  >
                     Discard Story
                   </button>
                 </div>
@@ -160,7 +184,6 @@ const MainPage = () => {
             )}
           </div>
         </div>
-
       </div>
     </div>
   );

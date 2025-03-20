@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(true);
     setIsGuest(true);
     setUserId(null);
-    setUsername("");
+    setUsername("Guest");
   };
 
   return (

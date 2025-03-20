@@ -15,7 +15,9 @@ const LoginForm = () => {
     e.preventDefault();
     setError("");
 
-    // Error checking
+    // Debugging: Log the backend URL
+    console.log("VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
+
     if (!username) {
       setError("Username cannot be empty");
       return;
@@ -26,23 +28,22 @@ const LoginForm = () => {
     }
 
     try {
-      // local version
-      const response = await axios.post("http://localhost:5050/login", {
-        username,
-        password,
-      });
-
-      // for deployment version
-      // const response = await axios.post(
-      //   `${process.env.REACT_APP_BACKEND_URL}/`,
-      //   { username, password }
-      // );
+      // localhost
+      // const response = await axios.post("http://localhost:5050/login", {
+      //   username,
+      //   password,
+      // });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/login`,
+        {
+          username,
+          password,
+        }
+      );
 
       if (response.data.success) {
         console.log("login successful:", response.data);
-        console.log("userId from response:", response.data.userId); // Log userId from response
-        console.log("username from response:", response.data.username); // Log username from response
-        login(response.data.userId, response.data.username); // Pass userId and username to login function
+        login(response.data.userId, response.data.username);
         navigate("/main");
       } else {
         setError("Invalid username or password");

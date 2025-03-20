@@ -1,42 +1,54 @@
 const express = require("express");
 const cors = require("cors");
-// const mysql = require("mysql2");
 const userController = require("./controllers/userController");
 const storyController = require("./controllers/storyController");
-// const userRepository = require("./repositories/userRepository");
-// require("dotenv").config(); // load .env variables
+const userRepository = require("./repositories/userRepository");
+const storyRepository = require("./repositories/storyRepository");
+require("dotenv").config(); // load .env variables
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 
-// Configure CORS to accept requests from your deployed frontend
-// const corsOptions = {
-//   origin: "https://story-bedtime-generator.netlify.app", // Replace with your deployed frontend domain
-//   optionsSuccessStatus: 200,
-// };
-// app.use(cors(corsOptions));
+// Dynamically set allowed origins based on environment
+const allowedOrigins =
+  process.env.ENV === "deployment"
+    ? ["https://story-bedtime-generator.netlify.app"] // Deployed frontend
+    : ["http://localhost:5173"]; // Local development
 
-// Use DATABASE_URL from environment variables
-// const mysqlConnection = mysql.createConnection(process.env.DATABASE_URL);
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies if needed
+  })
+);
 
-// mysqlConnection.connect((err) => {
-//   if (err) {
-//     console.error("❌ Database connection failed (server.js):", err.stack);
-//     return;
-//   }
-//   console.log("✅ Connected to the MySQL database! (server.js)");
+// Log incoming requests for debugging
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
 
-  // Initialize the database
-//   userRepository
-//     .initializeDatabase()
-//     .then(() => {
-//       console.log("✅ Database initialized!");
-//     })
-//     .catch((err) => {
-//       console.error("❌ Database initialization failed:", err);
-//     });
-// });
+// Initialize the database
+Promise.all([
+  userRepository.initializeDatabase(),
+  storyRepository.initializeDatabase(),
+])
+  .then(() => {
+    console.log(
+      `✅ Databases ${
+        process.env.ENV === "deployment" ? "reset and " : ""
+      }initialized!`
+    );
+  })
+  .catch((err) => {
+    console.error("❌ Database initialization failed:", err);
+  });
 
 app.post("/signup", userController.signup);
 app.post("/login", userController.login);
@@ -45,7 +57,12 @@ app.get("/stories/:userId", storyController.getStoriesByUserId);
 app.post("/save-story", storyController.saveStory);
 app.delete("/stories/:id", storyController.deleteStoryById);
 
-const PORT = process.env.PORT;
+// Add this to server.js
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+const PORT = process.env.PORT || 5050; // Use Railway's dynamic port or default to 5050
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

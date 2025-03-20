@@ -13,8 +13,12 @@ const SavedStories = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
+        // local version
+        // const response = await axios.get(
+        //   `http://localhost:5050/stories/${userId}`
+        // );
         const response = await axios.get(
-          `http://localhost:5050/stories/${userId}`
+          `${import.meta.env.VITE_BACKEND_URL}/stories/${userId}`
         );
         setStories(response.data);
       } catch (error) {
@@ -35,20 +39,33 @@ const SavedStories = () => {
     setSelectedStory(null);
   };
 
-  const handleDeleteStory = (storyId) => {
-    setStories((prevStories) =>
-      prevStories.filter((story) => story.id !== storyId)
-    );
+  const handleDeleteStory = async (storyId) => {
+    try {
+      // local version
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/stories/${storyId}`
+      );
+      setStories((prevStories) =>
+        prevStories.filter((story) => story.id !== storyId)
+      );
+    } catch (error) {
+      console.error("Error deleting story:", error);
+    }
   };
 
   return (
     <div>
       <Header />
-      <div className={`flex ${showModal ? 'sm:flex-col md:flex-row' : 'flex-row'} gap-10 transition-all duration-700`}>
-        
+      <div
+        className={`flex ${
+          showModal ? "sm:flex-col md:flex-row" : "flex-row"
+        } gap-10 transition-all duration-700`}
+      >
         {/* Stories List */}
-        <div className={`bg-gray-100 p-6 rounded shadow-lg overflow-auto max-h-[80vh] transition-all duration-700 ease-in-out
-          ${showModal ? 'sm:hidden md:block' : 'block'}`}>
+        <div
+          className={`bg-gray-100 p-6 rounded shadow-lg overflow-auto max-h-[80vh] transition-all duration-700 ease-in-out
+          ${showModal ? "sm:hidden md:block" : "block"}`}
+        >
           <h2 className="text-2xl font-bold mb-8 mt-8">Saved Stories</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {stories.map((story) => (
@@ -65,10 +82,11 @@ const SavedStories = () => {
         </div>
 
         {/* Modal */}
-        <div className={`transition-all duration-700 ease-in-out
-          ${showModal ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}
-          ${showModal ? 'w-full sm:w-full md:max-w-[70vw]' : 'hidden'}`}>
-          
+        <div
+          className={`transition-all duration-700 ease-in-out
+          ${showModal ? "opacity-100 scale-100" : "opacity-0 scale-90"}
+          ${showModal ? "w-full sm:w-full md:max-w-[70vw]" : "hidden"}`}
+        >
           <Modal
             show={showModal}
             onClose={handleCloseModal}
@@ -80,7 +98,6 @@ const SavedStories = () => {
             onDelete={handleDeleteStory}
           />
         </div>
-
       </div>
     </div>
   );
