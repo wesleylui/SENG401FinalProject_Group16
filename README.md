@@ -10,20 +10,20 @@ npm install
 
 ### Setup Environment
 Add required environment variables.
-Get a gemini API [here](https://aistudio.google.com/prompts/new_chat)
-```bash
+Get a gemini API key [here](https://aistudio.google.com/prompts/new_chat)
+```bash;
 DATABASE_URL="mysql://root:goSaShAHwUcqmjnRBBGTjgoCeKQGNbTt@hopper.proxy.rlwy.net:55825/railway"
 PORT=5050
 
-REACT_APP_BACKEND_URL="mysql-production-9e33.up.railway.app"
-
+# Add your MySQL password here
 DB_PASSWORD=""
 
+# When running locally, add your gemini api key here
 GEMINI_API=""
 GEMINI_MODEL="gemini-2.0-flash"
 ```
 
-### Start the Application
+### Start the Application Locally
 
 run the application
 ```bash
