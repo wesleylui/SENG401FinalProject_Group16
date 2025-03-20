@@ -8,28 +8,12 @@ require("dotenv").config(); // load .env variables
 
 const app = express();
 app.use(express.json());
-
-// ✅ Allow all origins for debugging (remove * in production)
 app.use(
   cors({
-    origin: "*", // Replace "*" with specific origin in production
-    methods: "GET,POST,PUT,DELETE,OPTIONS",
-    allowedHeaders: "Content-Type,Authorization",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Allow frontend URL
+    credentials: true, // Allow cookies if needed
   })
 );
-
-// ✅ Explicitly handle preflight requests
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Replace "*" with specific origin in production
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  return res.sendStatus(204); // No Content
-});
-
-// Add a route for "/"
-app.get("/", (req, res) => {
-  res.send("Backend is running!");
-});
 
 // Initialize the database
 Promise.all([
@@ -54,7 +38,7 @@ app.get("/stories/:userId", storyController.getStoriesByUserId);
 app.post("/save-story", storyController.saveStory);
 app.delete("/stories/:id", storyController.deleteStoryById);
 
-const PORT = process.env.PORT || 5050;
-app.listen(PORT, "0.0.0.0", () =>
-  console.log(`🚀 Server running on port ${PORT}`)
-);
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on ${PORT}`);
+});
