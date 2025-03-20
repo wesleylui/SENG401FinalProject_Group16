@@ -8,12 +8,31 @@ require("dotenv").config(); // load .env variables
 
 const app = express();
 app.use(express.json());
+
+// Dynamically set allowed origins based on environment
+const allowedOrigins =
+  process.env.ENV === "deployment"
+    ? ["https://story-bedtime-generator.netlify.app"] // Deployed frontend
+    : ["http://localhost:5173"]; // Local development
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Allow frontend URL
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true, // Allow cookies if needed
   })
 );
+
+// Log incoming requests for debugging
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
 
 // Initialize the database
 Promise.all([
@@ -38,7 +57,12 @@ app.get("/stories/:userId", storyController.getStoriesByUserId);
 app.post("/save-story", storyController.saveStory);
 app.delete("/stories/:id", storyController.deleteStoryById);
 
-const PORT = process.env.PORT;
+// Add this to server.js
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+const PORT = process.env.PORT || 5050; // Use Railway's dynamic port or default to 5050
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
