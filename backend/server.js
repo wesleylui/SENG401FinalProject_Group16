@@ -24,6 +24,11 @@ app.options("*", (req, res) => {
   return res.sendStatus(204); // No Content
 });
 
+// Add a route for "/"
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
+
 // Initialize the database
 Promise.all([
   userRepository.initializeDatabase(),
@@ -49,5 +54,5 @@ app.delete("/stories/:id", storyController.deleteStoryById);
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on ${PORT}`);
 });
