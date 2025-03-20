@@ -19,8 +19,9 @@ const Modal = ({ show, onClose, title, genre, description, story, storyId, onDel
   };
 
   return (
-    <div className="fixed inset-0 bg-white bg-opacity-90 flex justify-center items-center">
-      <div className="bg-white p-6 rounded shadow-lg w-3/4 max-w-lg relative">
+    <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center">
+      <div className="bg-white p-8 rounded shadow-lg w-[50vw] h-[80vh] relative">
+
         {/* Delete Story button in the top-left */}
         <button
           className="absolute top-2 left-2 text-sm text-red-500 hover:text-red-700"
@@ -31,14 +32,14 @@ const Modal = ({ show, onClose, title, genre, description, story, storyId, onDel
         <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
           &times;
         </button>
-        <div className="overflow-y-auto max-h-screen pt-8 pr-8">
+        <div className="overflow-y-auto h-full pt-8 pr-8">
           <div className="flex justify-between mb-4">
             <span className="font-bold text-xl">{title}</span>
             <span className="text-lg text-gray-600">{genre}</span>
           </div>
           <p className="mb-4">{description}</p> {/* Display description */}
           <textarea
-            className="w-full h-auto max-h-96 p-2 border border-gray-300 rounded resize-none"
+            className="w-full h-full max-h-96 p-2 border border-gray-300 rounded resize-none"
             readOnly
             value={story} // Display story
           />
