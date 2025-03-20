@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(cors({
   origin: "https://story-bedtime-generator.netlify.app", // Allow requests from your frontend
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific HTTP methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
   credentials: true, // Allow cookies if needed
 }));
 
