@@ -66,3 +66,29 @@ export const deleteStory = async (storyId, backendUrl) => {
     return { success: false, error: error.response?.data?.error || "Failed to delete the story." };
   }
 };
+
+export const generateStory = async ({
+  storyLength,
+  storyGenre,
+  storyDescription,
+  backendUrl,
+  onSuccess,
+  onError,
+}) => {
+  if (!storyLength || !storyGenre || !storyDescription) {
+    onError("All fields (genre, length, and description) are required.");
+    return;
+  }
+
+  try {
+    const response = await axios.post(`${backendUrl}/generate`, {
+      storyLength,
+      storyGenre,
+      storyDescription,
+    });
+    onSuccess(response.data);
+  } catch (error) {
+    console.error("Error generating story:", error.response?.data || error);
+    onError("Error generating story. Please try again.");
+  }
+};

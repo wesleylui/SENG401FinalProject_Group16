@@ -9,7 +9,7 @@ import AdditionalContentInput from "./AdditionalContentInput";
 import NewCharacterInput from "./NewCharacterInput";
 import MoralInput from "./MoralInput";
 import EndingDirectionInput from "./EndingDirectionInput";
-import { handleSave, handleDiscard, deleteStory } from "../utils/storyHandlers";
+import { handleSave, handleDiscard, deleteStory, continueStory } from "../utils/storyHandlers";
 
 const Modal = ({
   show,
@@ -20,7 +20,9 @@ const Modal = ({
   story,
   storyLength,
   storyId,
+  userId, // Add userId as a prop
   onDelete,
+  onAddStory, // Add onAddStory as a prop
 }) => {
   const [showContinueBox, setShowContinueBox] = useState(false);
   const [additionalContent, setAdditionalContent] = useState("");
@@ -62,30 +64,26 @@ const Modal = ({
     }
   };
 
-  const handleContinueStory = async () => {
-    try {
-      const response = await axios.post(`${backendUrl}/continuestory`, {
-        originalStory: story,
-        storyLength,
-        storyGenre: genre,
-        plotProgression: additionalContent,
-        newCharacter,
-        moral,
-        endingDirection,
-      });
-
-      setContinuation(response.data.continuation);
-    } catch (error) {
-      console.error("Error continuing story:", error);
-      alert("Failed to generate continuation. Please try again.");
-    }
+  const handleContinueStory = () => {
+    continueStory({
+      originalStory: story,
+      storyLength,
+      storyGenre: genre,
+      plotProgression: additionalContent,
+      newCharacter,
+      moral,
+      endingDirection,
+      backendUrl,
+      onSuccess: setContinuation,
+      onError: (errorMessage) => alert(errorMessage),
+    });
   };
 
   const saveContinuation = () => {
     const newStoryDescription = `Continuation of: ${description}`; // Update the description
 
     handleSave({
-      userId, // Use the same userId as the original story
+      userId, // Use the passed userId prop
       storyTitle: `${title} (Continued)`, // Create a new title for the continuation
       storyLength, // Use the same length as the original story
       storyGenre: genre, // Use the same genre as the original story
@@ -205,7 +203,9 @@ Modal.propTypes = {
   story: PropTypes.string,
   storyLength: PropTypes.string.isRequired,
   storyId: PropTypes.number.isRequired,
+  userId: PropTypes.number.isRequired, // Add userId to prop types
   onDelete: PropTypes.func.isRequired,
+  onAddStory: PropTypes.func.isRequired, // Add onAddStory to prop types
 };
 
 export default Modal;

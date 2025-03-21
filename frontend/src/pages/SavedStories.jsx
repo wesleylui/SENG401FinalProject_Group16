@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import { useAuth } from "../context/AuthContext";
+import { fetchSavedStories, deleteStory } from "../utils/storyHandlers";
 
 const SavedStories = () => {
   const { userId } = useAuth();
@@ -16,16 +17,12 @@ const SavedStories = () => {
       : import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    const fetchStories = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/stories/${userId}`);
-        setStories(response.data);
-      } catch (error) {
-        console.error("Error fetching stories:", error);
-      }
-    };
-
-    fetchStories();
+    fetchSavedStories({
+      userId,
+      backendUrl,
+      onSuccess: setStories,
+      onError: (errorMessage) => console.error(errorMessage),
+    });
   }, [userId, backendUrl]);
 
   const handleCardClick = (story) => {
@@ -39,14 +36,18 @@ const SavedStories = () => {
   };
 
   const handleDeleteStory = async (storyId) => {
-    try {
-      await axios.delete(`${backendUrl}/stories/${storyId}`);
+    const { success, error } = await deleteStory(storyId, backendUrl);
+    if (success) {
       setStories((prevStories) =>
         prevStories.filter((story) => story.id !== storyId)
       );
-    } catch (error) {
-      console.error("Error deleting story:", error);
+    } else {
+      console.error(error);
     }
+  };
+
+  const handleAddStory = (newStory) => {
+    setStories((prevStories) => [...prevStories, newStory]);
   };
 
   return (
@@ -92,7 +93,9 @@ const SavedStories = () => {
             story={selectedStory?.story}
             storyLength={selectedStory?.length}
             storyId={selectedStory?.id}
+            userId={userId} // Pass userId to Modal
             onDelete={handleDeleteStory}
+            onAddStory={handleAddStory} // Pass handleAddStory to Modal
           />
         </div>
       </div>

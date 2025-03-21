@@ -10,7 +10,7 @@ import TTSControls from "../components/TTSControls";
 import SaveStoryButton from "../components/SaveStoryButton";
 import DiscardStoryButton from "../components/DiscardStoryButton";
 import GenerateStoryButton from "../components/GenerateStoryButton";
-import { handleSave, handleDiscard } from "../utils/storyHandlers";
+import { generateStory, handleSave, handleDiscard } from "../utils/storyHandlers";
 
 const MainPage = () => {
   const { userId, isGuest, logout } = useAuth();
@@ -27,29 +27,22 @@ const MainPage = () => {
       ? "http://localhost:5050"
       : import.meta.env.VITE_BACKEND_URL;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     setGuestMessage("");
 
-    if (!storyGenre || !storyLength || !storyDescription) {
-      setError("All fields (genre, length, and description) are required");
-      return;
-    }
-
-    try {
-      const response = await axios.post(`${backendUrl}/generate`, {
-        storyLength,
-        storyGenre,
-        storyDescription,
-      });
-
-      setStoryTitle(response.data.storyTitle);
-      setStory(response.data.story);
-    } catch (err) {
-      console.error("Story generation error:", err);
-      setError("Error generating story. Please try again.");
-    }
+    generateStory({
+      storyLength,
+      storyGenre,
+      storyDescription,
+      backendUrl,
+      onSuccess: (data) => {
+        setStoryTitle(data.storyTitle);
+        setStory(data.story);
+      },
+      onError: (errorMessage) => setError(errorMessage),
+    });
   };
 
   const saveStory = () => {

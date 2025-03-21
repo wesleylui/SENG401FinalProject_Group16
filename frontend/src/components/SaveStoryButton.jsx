@@ -4,7 +4,6 @@ const SaveStoryButton = ({ onSave }) => {
   const handleClick = async () => {
     try {
       await onSave();
-      alert("Story saved successfully!");
     } catch (error) {
       alert("Failed to save the story. Please try again.");
     }
