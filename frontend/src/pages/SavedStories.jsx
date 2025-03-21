@@ -48,9 +48,9 @@ const SavedStories = () => {
 
   const handleAddStory = (newStory, callback) => {
     setStories((prevStories) => [...prevStories, newStory]);
-    setSelectedStory(newStory); // Switch to the newly added story
-    setShowModal(true); // Ensure the modal is open
-    callback && callback(); // Execute any additional logic passed as a callback
+    setSelectedStory(newStory);
+    setShowModal(true);
+    callback && callback();
   };
 
   return (
@@ -68,16 +68,20 @@ const SavedStories = () => {
         >
           <h2 className="text-2xl font-bold mb-8 mt-8">Saved Stories</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {stories.map((story) => (
-              <div
-                key={story.id}
-                className="bg-white p-6 pt-8 rounded shadow-lg cursor-pointer flex flex-col"
-                onClick={() => handleCardClick(story)}
-              >
-                <h3 className="text-2xl font-bold mb-1">{story.title}</h3>
-                <h4 className="text-lg text-gray-600 mb-2">{story.genre}</h4>
-              </div>
-            ))}
+            {stories.length === 0 ? (
+              <p className="text-gray-500 text-center col-span-full">No saved stories</p>
+            ) : (
+              stories.map((story) => (
+                <div
+                  key={story.id}
+                  className="bg-white p-6 pt-8 rounded shadow-lg cursor-pointer flex flex-col"
+                  onClick={() => handleCardClick(story)}
+                >
+                  <h3 className="text-2xl font-bold mb-1">{story.title}</h3>
+                  <h4 className="text-lg text-gray-600 mb-2">{story.genre}</h4>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
