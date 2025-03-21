@@ -22,7 +22,7 @@ const initializeDatabase = async () => {
 
   const insertAdminStorySQL = `
     INSERT IGNORE INTO stories (user_id, title, length, genre, description, story) VALUES
-    (1, "Arthur's Craft", "100", 'fairy tale', "Write a story about a student API developer",
+    (1, "Arthur's Craft", "100", 'Fairy Tale', "Write a story about a student API developer",
     "Once upon a time, in the shimmering kingdom of Silicon Valley, lived a young student, Arthur, an API Developer. He dreamed of crafting enchanted interfaces. One day, a grumpy King, plagued by slow data, tasked Arthur with a quest: build a lightning-fast API!\\n\\nArthur, with his trusty laptop and knowledge of REST, toiled night and day. He conjured endpoints, summoned JSON responses, and vanquished bugs with skillful debugging. Finally, he presented his API. The King, delighted, found his kingdom's data flowing with unprecedented speed. Arthur was celebrated, and lived happily ever after, building APIs for all the land.");
   `;
 

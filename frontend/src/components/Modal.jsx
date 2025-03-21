@@ -75,7 +75,7 @@ const Modal = ({
           <span className="text-lg text-gray-600">{genre}</span>
           <p className="mb-4">{description}</p> {/* Display description */}
           <textarea
-            className="w-full h-full max-h-96 p-2 border border-gray-300 rounded resize-none"
+            className="w-full h-full max-h-[calc(80vh-150px)] p-2 border border-gray-300 rounded resize-none"
             readOnly
             value={story} // Display story
           />

@@ -55,7 +55,7 @@ const SavedStories = () => {
       <div
         className={`flex ${
           showModal ? "sm:flex-col md:flex-row" : "flex-row"
-        } gap-10 transition-all duration-700`}
+        } gap-10 transition-all duration-700 mt-20`}
       >
         {/* Stories List */}
         <div
