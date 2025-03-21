@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import TTSControls from "./TTSControls";
 import SaveStoryButton from "./SaveStoryButton";
 import DiscardStoryButton from "./DiscardStoryButton";
@@ -9,7 +8,12 @@ import AdditionalContentInput from "./AdditionalContentInput";
 import NewCharacterInput from "./NewCharacterInput";
 import MoralInput from "./MoralInput";
 import EndingDirectionInput from "./EndingDirectionInput";
-import { handleSave, handleDiscard, deleteStory, continueStory } from "../utils/storyHandlers";
+import {
+  handleSave,
+  handleDiscard,
+  deleteStory,
+  continueStory,
+} from "../utils/storyHandlers";
 
 const Modal = ({
   show,
@@ -30,6 +34,22 @@ const Modal = ({
   const [moral, setMoral] = useState("");
   const [endingDirection, setEndingDirection] = useState("");
   const [continuation, setContinuation] = useState("");
+
+  const modalContentRef = useRef(null); // ref for modal content scrolling
+
+  useEffect(() => {
+    // Scroll to the top of the modal content when the modal is opened or story changes
+    if (show && modalContentRef.current) {
+      modalContentRef.current.scrollTop = 0;
+    }
+    // Reset the "Continue Story" fields when switching stories
+    setShowContinueBox(false);
+    setAdditionalContent("");
+    setNewCharacter("");
+    setMoral("");
+    setEndingDirection("");
+    setContinuation("");
+  }, [show, storyId]); // Trigger when modal is shown or storyId changes
 
   useEffect(() => {
     // Stop TTS when the modal is closed
@@ -132,7 +152,10 @@ const Modal = ({
         <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
           &times;
         </button>
-        <div className="overflow-y-auto h-full pt-8 pr-8">
+        <div
+          ref={modalContentRef} // Attach the ref to the scrollable content
+          className="overflow-y-auto h-full pt-8 pr-8"
+        >
           <div className="flex justify-between items-center mb-4">
             <span className="font-bold text-xl">{title}</span>
             <TTSControls story={story} />

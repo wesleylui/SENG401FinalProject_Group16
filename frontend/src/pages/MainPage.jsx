@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
-import axios from "axios";
 import StoryTitleSelector from "../components/StoryTitleSelector";
 import StoryLengthSelector from "../components/StoryLengthSelector";
 import StoryGenreSelector from "../components/StoryGenreSelector";
