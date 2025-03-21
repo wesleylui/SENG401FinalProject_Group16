@@ -6,6 +6,7 @@ import StoryTitleSelector from "../components/StoryTitleSelector";
 import StoryLengthSelector from "../components/StoryLengthSelector";
 import StoryGenreSelector from "../components/StoryGenreSelector";
 import { useAuth } from "../context/AuthContext";
+import TTSControls from "../components/TTSControls";
 
 const MainPage = () => {
   const { userId, isGuest, logout } = useAuth();
@@ -161,6 +162,7 @@ const MainPage = () => {
                   Genre: {storyGenre}
                 </p>
                 <p className="text-blue-500 mb-3">{story}</p>
+                <TTSControls story={story} />
               </div>
             )}
             {/* Save Discard and Change Story Buttons */}

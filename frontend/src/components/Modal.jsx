@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVolumeUp } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
+import TTSControls from "./TTSControls";
 
 const Modal = ({
   show,
@@ -13,6 +13,15 @@ const Modal = ({
   storyId,
   onDelete,
 }) => {
+  useEffect(() => {
+    // Stop TTS when the modal is closed
+    return () => {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [storyId]);
+
   if (!show) {
     return null;
   }
@@ -34,16 +43,6 @@ const Modal = ({
     }
   };
 
-  const handleReadStory = () => {
-    if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(story);
-      utterance.lang = "en-US";
-      window.speechSynthesis.speak(utterance);
-    } else {
-      alert("Text-to-Speech is not supported in this browser.");
-    }
-  };
-
   return (
     <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center mt-16">
       <div className="bg-white p-8 rounded shadow-lg w-[50vw] h-[80vh] relative">
@@ -60,17 +59,7 @@ const Modal = ({
         <div className="overflow-y-auto h-full pt-8 pr-8">
           <div className="flex justify-between items-center mb-4">
             <span className="font-bold text-xl">{title}</span>
-            {/* Read Story Button */}
-            <button
-              className="bg-blue-500 p-3 rounded-full shadow-lg hover:bg-blue-600 transition"
-              onClick={handleReadStory}
-            >
-              <FontAwesomeIcon
-                icon={faVolumeUp}
-                size="lg"
-                className="text-black"
-              />
-            </button>
+            <TTSControls story={story} />
           </div>
           <span className="text-lg text-gray-600">{genre}</span>
           <p className="mb-4">{description}</p> {/* Display description */}
