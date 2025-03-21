@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Dynamically set allowed origins based on environment
 const allowedOrigins =
-  process.env.ENV === "deployment"
+  process.env.ENV === "deployment" || process.env.ENV === "production" // do NOT change this line
     ? ["https://story-bedtime-generator.netlify.app"] // Deployed frontend
     : ["http://localhost:5173"]; // Local development
 
@@ -24,7 +24,7 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allow cookies if needed
+    credentials: true,
   })
 );
 
