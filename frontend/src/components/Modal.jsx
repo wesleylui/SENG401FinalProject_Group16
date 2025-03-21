@@ -24,9 +24,9 @@ const Modal = ({
   story,
   storyLength,
   storyId,
-  userId, // Add userId as a prop
+  userId,
   onDelete,
-  onAddStory, // Add onAddStory as a prop
+  onAddStory,
 }) => {
   const [showContinueBox, setShowContinueBox] = useState(false);
   const [additionalContent, setAdditionalContent] = useState("");
@@ -143,20 +143,10 @@ const Modal = ({
   return (
     <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center mt-16">
       <div className="bg-white p-8 rounded shadow-lg w-[50vw] h-[80vh] relative">
-        {/* Delete Story button in the top-left */}
-        <button
-          className="absolute top-2 left-2 text-sm text-red-500 hover:text-red-700"
-          onClick={handleDelete}
-        >
-          Delete Story
-        </button>
         <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
           &times;
         </button>
-        <div
-          ref={modalContentRef} // Attach the ref to the scrollable content
-          className="overflow-y-auto h-full pt-8 pr-8"
-        >
+        <div ref={modalContentRef} className="overflow-y-auto h-full pt-8 pr-8">
           <div className="flex justify-between items-center mb-4">
             <span className="font-bold text-xl">{title}</span>
             <TTSControls story={story} />
@@ -166,8 +156,17 @@ const Modal = ({
           <textarea
             className="w-full h-full max-h-[calc(80vh-150px)] p-2 border border-gray-300 rounded resize-none"
             readOnly
-            value={story} // Display story
+            value={story}
           />
+          {/* Delete Story Button */}
+          <div className="flex justify-end mt-4">
+            <button
+              className="text-sm text-red-500 hover:text-red-700"
+              onClick={handleDelete}
+            >
+              Delete Story
+            </button>
+          </div>
           {/* Continue Story Button */}
           <div className="flex justify-center mt-4">
             <button
@@ -227,9 +226,9 @@ Modal.propTypes = {
   story: PropTypes.string,
   storyLength: PropTypes.string.isRequired,
   storyId: PropTypes.number.isRequired,
-  userId: PropTypes.number.isRequired, // Add userId to prop types
+  userId: PropTypes.number.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onAddStory: PropTypes.func.isRequired, // Add onAddStory to prop types
+  onAddStory: PropTypes.func.isRequired,
 };
 
 export default Modal;

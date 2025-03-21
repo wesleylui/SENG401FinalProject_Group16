@@ -41,7 +41,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
         </label>
         <label
           className={`px-4 py-2 border rounded cursor-pointer ${
-            storyGenre === "Sci-Fi"
+            storyGenre === "Adventure"
               ? "bg-blue-500 text-white"
               : "bg-white text-black"
           }`}
@@ -49,12 +49,12 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
           <input
             type="radio"
             name="storyGenre"
-            value="Sci-Fi"
+            value="Adventure"
             className="hidden"
-            checked={storyGenre === "Sci-Fi"}
+            checked={storyGenre === "Adventure"}
             onChange={(e) => setStoryGenre(e.target.value)}
           />
-          Sci-Fi
+          Adventure
         </label>
       </div>
     </div>
