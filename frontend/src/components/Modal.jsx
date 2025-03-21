@@ -100,31 +100,33 @@ const Modal = ({
   };
 
   const saveContinuation = () => {
-    const newStoryDescription = `Continuation of: ${description}`; // Update the description
+    const newStoryDescription = `Continuation of: ${description}`;
 
     handleSave({
-      userId, // Use the passed userId prop
-      storyTitle: `${title} (Continued)`, // Create a new title for the continuation
-      storyLength, // Use the same length as the original story
-      storyGenre: genre, // Use the same genre as the original story
-      storyDescription: newStoryDescription, // Updated description for continuation
-      story: continuation, // New content for the continuation
+      userId,
+      storyTitle: `${title} (Continued)`,
+      storyLength,
+      storyGenre: genre,
+      storyDescription: newStoryDescription,
+      story: continuation,
       backendUrl,
       onSuccess: (message) => {
-        alert(message); // Alert success message
-        onAddStory({
+        alert(message);
+        const newStory = {
           id: Date.now(), // Temporary ID for the new story
           title: `${title} (Continued)`,
           genre,
           description: newStoryDescription,
           story: continuation,
           length: storyLength,
+        };
+        onAddStory(newStory, () => {
+          setContinuation("");
+          setShowContinueBox(false);
         });
-        setContinuation("");
-        setShowContinueBox(false);
       },
       onError: (errorMessage) => {
-        alert(errorMessage); // Alert error message
+        alert(errorMessage);
       },
     });
   };

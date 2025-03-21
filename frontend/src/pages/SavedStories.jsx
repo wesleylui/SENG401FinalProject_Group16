@@ -45,8 +45,11 @@ const SavedStories = () => {
     }
   };
 
-  const handleAddStory = (newStory) => {
+  const handleAddStory = (newStory, callback) => {
     setStories((prevStories) => [...prevStories, newStory]);
+    setSelectedStory(newStory); // Switch to the newly added story
+    setShowModal(true); // Ensure the modal is open
+    callback && callback(); // Execute any additional logic passed as a callback
   };
 
   return (
