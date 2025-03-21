@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TTSControls from "./TTSControls";
+import SaveStoryButton from "./SaveStoryButton";
+import DiscardStoryButton from "./DiscardStoryButton";
+import GenerateStoryButton from "./GenerateStoryButton";
 
 const Modal = ({
   show,
@@ -13,6 +16,9 @@ const Modal = ({
   storyId,
   onDelete,
 }) => {
+  const [showContinueBox, setShowContinueBox] = useState(false);
+  const [additionalContent, setAdditionalContent] = useState("");
+
   useEffect(() => {
     // Stop TTS when the modal is closed
     return () => {
@@ -68,6 +74,69 @@ const Modal = ({
             readOnly
             value={story} // Display story
           />
+          {/* Continue Story Button */}
+          <div className="flex justify-center mt-4">
+            <button
+              className="bg-blue-500 text-black py-2 px-6 rounded hover:bg-blue-600 transition"
+              onClick={() => setShowContinueBox(true)}
+            >
+              Continue Story
+            </button>
+          </div>
+          {/* Continue Story Box */}
+          {showContinueBox && (
+            <div className="mt-6 p-4 border border-gray-300 rounded bg-gray-100">
+              <h3 className="text-lg font-bold mb-4">Continue Your Story</h3>
+              {/* Plot Progression */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  What should happen next in the story?
+                </label>
+                <textarea
+                  className="w-full h-20 p-2 border border-gray-400 rounded"
+                  placeholder="Describe the next part of the plot..."
+                  value={additionalContent}
+                  onChange={(e) => setAdditionalContent(e.target.value)}
+                />
+              </div>
+              {/* Introduce a New Character */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  Introduce a new character (optional)
+                </label>
+                <textarea
+                  className="w-full h-20 p-2 border border-gray-400 rounded"
+                  placeholder="Describe the new character..."
+                />
+              </div>
+              {/* Morals */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  Should this part of the story include a moral or lesson?
+                </label>
+                <textarea
+                  className="w-full h-20 p-2 border border-gray-400 rounded"
+                  placeholder="Describe the moral or lesson..."
+                />
+              </div>
+              {/* Ending Direction */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  How should this part of the story end?
+                </label>
+                <textarea
+                  className="w-full h-20 p-2 border border-gray-400 rounded"
+                  placeholder="Describe the ending direction..."
+                />
+              </div>
+              {/* Generate Story Button */}
+              <div className="flex justify-end space-x-4">
+                <GenerateStoryButton
+                  onGenerate={() => alert("Story generation functionality coming soon!")}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

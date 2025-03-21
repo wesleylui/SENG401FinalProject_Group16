@@ -39,6 +39,42 @@ const generate = async (
   }
 };
 
+// continue story from gemini
+const continueStory = async (
+  originalStory,
+  storyLength,
+  storyGenre,
+  plotProgression,
+  newCharacter,
+  moral,
+  endingDirection
+) => {
+  const modified_prompt = `Please respond with the continuation of the story: "${originalStory}". 
+What happens next is: "${plotProgression}". 
+Introduce a new character: "${newCharacter}". 
+Include a moral or lesson: "${moral}". 
+The story should end as follows: "${endingDirection}". 
+Write this continuation in up to ${storyLength} words in a ${storyGenre} style.`;
+
+  console.log("Sending continuation prompt to Gemini API:", modified_prompt);
+
+  try {
+    const response = await model.generateContent(modified_prompt);
+    console.log("Response from Gemini API:", response.response.text());
+
+    const continuation = response.response.text();
+    if (!continuation) {
+      console.error("Response continuation improperly formatted");
+      // throw new error;
+    }
+
+    return { continuation };
+  } catch (error) {
+    console.error("Error during Gemini API call:", error);
+    throw error;
+  }
+};
+
 // get all stories attached to a userId
 const getStoriesByUserId = async (userId) => {
   const sql = "SELECT * FROM stories WHERE user_id = ?";
@@ -86,4 +122,4 @@ const deleteStoryById = async (id) => {
   }
 };
 
-module.exports = { generate, getStoriesByUserId, saveStory, deleteStoryById };
+module.exports = { generate, continueStory, getStoriesByUserId, saveStory, deleteStoryById };

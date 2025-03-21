@@ -7,6 +7,9 @@ import StoryLengthSelector from "../components/StoryLengthSelector";
 import StoryGenreSelector from "../components/StoryGenreSelector";
 import { useAuth } from "../context/AuthContext";
 import TTSControls from "../components/TTSControls";
+import SaveStoryButton from "../components/SaveStoryButton";
+import DiscardStoryButton from "../components/DiscardStoryButton";
+import GenerateStoryButton from "../components/GenerateStoryButton";
 
 const MainPage = () => {
   const { userId, isGuest, logout } = useAuth();
@@ -135,12 +138,7 @@ const MainPage = () => {
               />
             </div>
             {/* Generate Story Button */}
-            <button
-              type="submit"
-              className="bg-white text-black p-6 border border-gray-400 rounded w-full"
-            >
-              Generate Story
-            </button>
+            <GenerateStoryButton onGenerate={handleSubmit} />
           </form>
         </div>
 
@@ -173,18 +171,8 @@ const MainPage = () => {
                   setStoryTitle={setStoryTitle}
                 />
                 <div className="flex justify-center space-x-4 mt-4">
-                  <button
-                    className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
-                    onClick={handleSave}
-                  >
-                    Save Story
-                  </button>
-                  <button
-                    className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
-                    onClick={handleDiscard}
-                  >
-                    Discard Story
-                  </button>
+                  <SaveStoryButton onSave={handleSave} />
+                  <DiscardStoryButton onDiscard={handleDiscard} />
                 </div>
                 {guestMessage && (
                   <div className="text-center mt-4 text-red-500">
