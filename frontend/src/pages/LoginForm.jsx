@@ -16,7 +16,7 @@ const LoginForm = () => {
       ? "http://localhost:5050"
       : import.meta.env.VITE_BACKEND_URL;
 
-  console.log("Using backend URL:", backendUrl); // Debugging: Log the backend URL
+  // console.log("Using backend URL:", backendUrl); // Debugging: Log the backend URL
 
   const handleSubmit = async (e) => {
     e.preventDefault();

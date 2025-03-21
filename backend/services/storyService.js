@@ -10,7 +10,7 @@ const model = genAI.getGenerativeModel({
 
 // generate story from gemini
 const generate = async (storyLength, storyGenre, storyDescription) => {
-  const modified_prompt = `Write an up to ${storyLength} word story in a ${storyGenre} style based on the following description: "${storyDescription}". Please respond with the title surrounded by quotes ("") followed by the story.`;
+  const modified_prompt = `Write an up to ${storyLength} word bedtime story in a ${storyGenre} style based on the following description: "${storyDescription}". Please respond with the title surrounded by quotes ("") followed by the story. Stories suitable for children aged 3-8, focusing on relatable experiences. `;
   console.log("Sending prompt to Gemini API:", modified_prompt);
 
   try {
