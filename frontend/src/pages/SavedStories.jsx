@@ -10,16 +10,15 @@ const SavedStories = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedStory, setSelectedStory] = useState(null);
 
+  const backendUrl =
+    import.meta.env.ENV === "local"
+      ? "http://localhost:5050"
+      : import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        // local version
-        // const response = await axios.get(
-        //   `http://localhost:5050/stories/${userId}`
-        // );
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/stories/${userId}`
-        );
+        const response = await axios.get(`${backendUrl}/stories/${userId}`);
         setStories(response.data);
       } catch (error) {
         console.error("Error fetching stories:", error);
@@ -27,7 +26,7 @@ const SavedStories = () => {
     };
 
     fetchStories();
-  }, [userId]);
+  }, [userId, backendUrl]);
 
   const handleCardClick = (story) => {
     setSelectedStory(story);
@@ -41,10 +40,7 @@ const SavedStories = () => {
 
   const handleDeleteStory = async (storyId) => {
     try {
-      // local version
-      await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/stories/${storyId}`
-      );
+      await axios.delete(`${backendUrl}/stories/${storyId}`);
       setStories((prevStories) =>
         prevStories.filter((story) => story.id !== storyId)
       );

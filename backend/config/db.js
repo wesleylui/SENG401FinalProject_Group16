@@ -1,16 +1,20 @@
 const mysql = require("mysql2");
 require("dotenv").config(); // load .env variables
 
-// Create a MySQL connection locally
-// const db = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: process.env.DB_PASSWORD, // no pw. may have to change your sql pw (ask wesley)
-//   database: "story_gen", // db is called story_gen
-// });
+let db;
 
-// create MYSQL connection using Railway database URL
-const db = mysql.createConnection(process.env.DATABASE_URL);
+if (process.env.ENV === "local") {
+  console.log("🔧 Connecting to MySQL locally...");
+  db = mysql.createConnection({
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+  });
+} else {
+  console.log("🌐 Connecting to MySQL on Railway...");
+  db = mysql.createConnection(process.env.DATABASE_URL);
+}
 
 // Connect to MySQL
 db.connect((err) => {
@@ -18,7 +22,7 @@ db.connect((err) => {
     console.error("❌ Database connection failed (db.js):", err);
     return;
   }
-  console.log("✅ Connected to MySQL database! (db.js)");
+  console.log(`✅ Connected to MySQL database! (ENV: ${process.env.ENV})`);
 });
 
 module.exports = db;

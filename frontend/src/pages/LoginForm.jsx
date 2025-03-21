@@ -11,6 +11,13 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { login, guestLogin } = useAuth();
 
+  const backendUrl =
+    import.meta.env.ENV === "local"
+      ? "http://localhost:5050"
+      : import.meta.env.VITE_BACKEND_URL;
+
+  console.log("Using backend URL:", backendUrl); // Debugging: Log the backend URL
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -28,21 +35,12 @@ const LoginForm = () => {
     }
 
     try {
-      // localhost
-      // const response = await axios.post("http://localhost:5050/login", {
-      //   username,
-      //   password,
-      // });
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/login`,
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(`${backendUrl}/login`, {
+        username,
+        password,
+      });
 
       if (response.data.success) {
-        console.log("login successful:", response.data);
         login(response.data.userId, response.data.username);
         navigate("/main");
       } else {

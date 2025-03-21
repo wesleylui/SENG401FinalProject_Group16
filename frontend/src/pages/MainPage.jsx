@@ -7,7 +7,7 @@ import StoryGenreSelector from "../components/StoryGenreSelector";
 import { useAuth } from "../context/AuthContext";
 
 const MainPage = () => {
-  const { userId } = useAuth(); // Get userId from AuthContext
+  const { userId } = useAuth();
   const [storyDescription, setStoryDescription] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
   const [storyLength, setStoryLength] = useState("");
@@ -15,53 +15,35 @@ const MainPage = () => {
   const [error, setError] = useState("");
   const [story, setStory] = useState(null);
 
+  const backendUrl =
+    import.meta.env.ENV === "local"
+      ? "http://localhost:5050"
+      : import.meta.env.VITE_BACKEND_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Error checking
     if (!storyGenre || !storyLength || !storyDescription) {
       setError("All fields (genre, length, and description) are required");
       return;
     }
 
     try {
-      // local version
-      // const response = await axios.post("http://localhost:5050/generate", {
-      //   storyLength,
-      //   storyGenre,
-      //   storyDescription,
-      // });
+      const response = await axios.post(`${backendUrl}/generate`, {
+        storyLength,
+        storyGenre,
+        storyDescription,
+      });
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/generate`,
-        {
-          storyLength,
-          storyGenre,
-          storyDescription,
-        }
-      );
-
-      const storyTitle = response.data.storyTitle;
-      const story = response.data.story;
-      setStoryTitle(storyTitle);
-      setStory(story);
+      setStoryTitle(response.data.storyTitle);
+      setStory(response.data.story);
     } catch (err) {
       console.error("Story generation error:", err);
       setError("Error generating story. Please try again.");
     }
   };
 
-  // Discarding story clears all input fields
-  const handleDiscard = () => {
-    setStoryDescription("");
-    setStoryLength("");
-    setStoryGenre("");
-    setStory("");
-    setStoryTitle("");
-  };
-
-  // saving story to db
   const handleSave = async () => {
     if (!storyTitle || !storyGenre || !storyDescription || !story) {
       alert(
@@ -77,22 +59,23 @@ const MainPage = () => {
         storyLength,
         storyGenre,
         storyDescription,
-        story: story,
+        story,
       };
 
-      console.log("Saving story with payload:", payload); // Log the payload being sent
-
-      // local version
-      // await axios.post("http://localhost:5050/save-story", payload);
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/save-story`,
-        payload
-      );
+      await axios.post(`${backendUrl}/save-story`, payload);
       alert("Story saved successfully!");
     } catch (err) {
       console.error("Error saving story:", err.response?.data || err);
       alert("Failed to save the story. Please try again.");
     }
+  };
+
+  const handleDiscard = () => {
+    setStoryDescription("");
+    setStoryLength("");
+    setStoryGenre("");
+    setStory("");
+    setStoryTitle("");
   };
 
   return (

@@ -13,6 +13,11 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  const backendUrl =
+    import.meta.env.ENV === "local"
+      ? "http://localhost:5050"
+      : import.meta.env.VITE_BACKEND_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -33,20 +38,10 @@ const SignupForm = () => {
     }
 
     try {
-      // local version
-      // const response = await axios.post("http://localhost:5050/signup", {
-      //   username,
-      //   password,
-      // });
-
-      // deployment version
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/signup`,
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(`${backendUrl}/signup`, {
+        username,
+        password,
+      });
 
       setMessage(response.data.message);
       setUsername("");
@@ -74,7 +69,7 @@ const SignupForm = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          {/* Enter Passord Text Field */}
+          {/* Enter Password Text Field */}
           <input
             type="password"
             className="border p-2 w-full mb-3 rounded bg-white text-black"

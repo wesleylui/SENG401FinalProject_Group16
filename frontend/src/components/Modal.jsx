@@ -6,13 +6,17 @@ const Modal = ({ show, onClose, title, genre, description, story, storyId, onDel
     return null;
   }
 
+  const backendUrl =
+    import.meta.env.ENV === "local"
+      ? "http://localhost:5050"
+      : import.meta.env.VITE_BACKEND_URL;
+
   const handleDelete = async () => {
     try {
-      // await axios.delete(`http://localhost:5050/stories/${storyId}`); // localhost
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/stories/${storyId}`);
+      await axios.delete(`${backendUrl}/stories/${storyId}`);
       alert("Story deleted successfully!");
-      onDelete(storyId); // Notify parent component about deletion
-      onClose(); // Close the modal
+      onDelete(storyId);
+      onClose();
     } catch (error) {
       console.error("Error deleting story:", error);
       alert("Failed to delete the story. Please try again.");
