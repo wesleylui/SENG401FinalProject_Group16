@@ -11,7 +11,6 @@ const SignupForm = () => {
   const [error, setError] = useState(""); // for incorrect pw
   const [message, setMessage] = useState(""); // for success message
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const backendUrl =
     import.meta.env.ENV === "local"
@@ -43,14 +42,22 @@ const SignupForm = () => {
         password,
       });
 
-      setMessage(response.data.message);
+      if (response.status === 201) {
+        setMessage("User created successfully! Redirecting to login...");
+        setUsername("");
+        setPassword("");
+        setConfirmPassword("");
+
+        // Redirect to login page after a short delay
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
+    } catch (error) {
+      setError(error.response?.data?.error || "Signup failed. Please try again.");
       setUsername("");
       setPassword("");
       setConfirmPassword("");
-      login(response.data.userId, response.data.username); // Pass userId and username to login function
-      navigate("/main");
-    } catch (error) {
-      setError(error.response?.data?.error || "Something went wrong");
     }
   };
 
@@ -60,6 +67,7 @@ const SignupForm = () => {
       <div className="bg-white text-black p-6 rounded shadow-lg mb-4">
         <h2 className="text-xl font-bold text-center mb-4">Sign Up</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
+        {message && <p className="text-green-500 mb-4">{message}</p>}
         <form onSubmit={handleSubmit}>
           {/* Enter Username Text Field */}
           <input

@@ -81,7 +81,7 @@ const MainPage = () => {
   return (
     <div>
       <Header />
-      <h1 className="text-3xl font-bold md:mb-6 sm:mt-20 md:mt-0">
+      <h1 className="text-3xl font-bold md:mb-6 sm:mt-20 md:mt-24">
         Story Generator
       </h1>
       <div className="flex sm:flex-col md:flex-row gap-10">
