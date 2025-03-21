@@ -46,14 +46,7 @@ const saveStory = async (req, res) => {
     } = req.body;
 
     // Validate input
-    if (
-      !userId ||
-      !storyTitle ||
-      !storyLength ||
-      !storyGenre ||
-      !storyDescription ||
-      !story
-    ) {
+    if (!userId || !storyTitle || !storyDescription || !story) {
       console.error("Validation failed: Missing required fields");
       return res.status(400).json({ error: "All fields are required" });
     }
@@ -65,10 +58,10 @@ const saveStory = async (req, res) => {
       storyGenre,
       storyDescription,
       story
-    ); // Pass story to the service layer
+    );
     res.status(201).json({ message: "Story saved successfully" });
   } catch (error) {
-    console.error("Error saving story:", error); // Log the error details
+    console.error("Error saving story:", error);
     res.status(500).json({ error: "Failed to save story" });
   }
 };

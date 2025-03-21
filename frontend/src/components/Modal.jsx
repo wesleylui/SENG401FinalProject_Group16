@@ -75,16 +75,32 @@ const Modal = ({
   };
 
   const saveContinuation = () => {
+    const newStoryDescription = `Continuation of: ${description}`; // Update the description
+
     handleSave({
-      userId: storyId, // Replace with actual userId if available
-      storyTitle: title,
-      storyLength,
-      storyGenre: genre,
-      storyDescription: description,
-      story: continuation,
+      userId, // Use the same userId as the original story
+      storyTitle: `${title} (Continued)`, // Create a new title for the continuation
+      storyLength, // Use the same length as the original story
+      storyGenre: genre, // Use the same genre as the original story
+      storyDescription: newStoryDescription, // Updated description for continuation
+      story: continuation, // New content for the continuation
       backendUrl,
-      onSuccess: (message) => alert(message),
-      onError: (errorMessage) => alert(errorMessage),
+      onSuccess: (message) => {
+        alert(message); // Alert success message
+        onAddStory({
+          id: Date.now(), // Temporary ID for the new story
+          title: `${title} (Continued)`,
+          genre,
+          description: newStoryDescription,
+          story: continuation,
+          length: storyLength,
+        });
+        setContinuation("");
+        setShowContinueBox(false);
+      },
+      onError: (errorMessage) => {
+        alert(errorMessage); // Alert error message
+      },
     });
   };
 

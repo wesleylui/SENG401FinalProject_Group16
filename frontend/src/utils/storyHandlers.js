@@ -16,9 +16,9 @@ export const handleSave = async ({
     return;
   }
 
-  if (!storyTitle || !storyGenre || !storyDescription || !story) {
+  if (!storyTitle || !storyDescription || !story) {
     onError(
-      "All fields (title, genre, description, and story) are required to save the story."
+      "All fields (title, description, and story) are required to save the story."
     );
     return;
   }
@@ -36,7 +36,7 @@ export const handleSave = async ({
     await axios.post(`${backendUrl}/save-story`, payload);
     onSuccess("Story saved successfully!");
   } catch (err) {
-    console.error("Error saving story:", err.response?.data || err);
+    console.error("Error saving story:", err.response?.data || err); // Log error in terminal
     onError("Failed to save the story. Please try again.");
   }
 };
