@@ -5,6 +5,7 @@ import TTSControls from "./TTSControls";
 import SaveStoryButton from "./SaveStoryButton";
 import DiscardStoryButton from "./DiscardStoryButton";
 import GenerateStoryButton from "./GenerateStoryButton";
+import { handleSave, handleDiscard } from "../utils/storyHandlers";
 
 const Modal = ({
   show,
@@ -13,11 +14,16 @@ const Modal = ({
   genre,
   description,
   story,
+  storyLength,
   storyId,
   onDelete,
 }) => {
   const [showContinueBox, setShowContinueBox] = useState(false);
   const [additionalContent, setAdditionalContent] = useState("");
+  const [newCharacter, setNewCharacter] = useState("");
+  const [moral, setMoral] = useState("");
+  const [endingDirection, setEndingDirection] = useState("");
+  const [continuation, setContinuation] = useState("");
 
   useEffect(() => {
     // Stop TTS when the modal is closed
@@ -47,6 +53,49 @@ const Modal = ({
       console.error("Error deleting story:", error);
       alert("Failed to delete the story. Please try again.");
     }
+  };
+
+  const handleContinueStory = async () => {
+    try {
+      const response = await axios.post(`${backendUrl}/continuestory`, {
+        originalStory: story,
+        storyLength,
+        storyGenre: genre,
+        plotProgression: additionalContent,
+        newCharacter,
+        moral,
+        endingDirection,
+      });
+
+      setContinuation(response.data.continuation);
+    } catch (error) {
+      console.error("Error continuing story:", error);
+      alert("Failed to generate continuation. Please try again.");
+    }
+  };
+
+  const saveContinuation = () => {
+    handleSave({
+      userId: storyId, // Replace with actual userId if available
+      storyTitle: title,
+      storyLength,
+      storyGenre: genre,
+      storyDescription: description,
+      story: continuation,
+      backendUrl,
+      onSuccess: (message) => alert(message),
+      onError: (errorMessage) => alert(errorMessage),
+    });
+  };
+
+  const discardContinuation = () => {
+    handleDiscard({
+      setStoryTitle: () => {}, // No-op since title is static in Modal
+      setStoryLength: () => {},
+      setStoryGenre: () => {},
+      setStoryDescription: () => {},
+      setStory: setContinuation,
+    });
   };
 
   return (
@@ -107,6 +156,8 @@ const Modal = ({
                 <textarea
                   className="w-full h-20 p-2 border border-gray-400 rounded"
                   placeholder="Describe the new character..."
+                  value={newCharacter}
+                  onChange={(e) => setNewCharacter(e.target.value)}
                 />
               </div>
               {/* Morals */}
@@ -117,6 +168,8 @@ const Modal = ({
                 <textarea
                   className="w-full h-20 p-2 border border-gray-400 rounded"
                   placeholder="Describe the moral or lesson..."
+                  value={moral}
+                  onChange={(e) => setMoral(e.target.value)}
                 />
               </div>
               {/* Ending Direction */}
@@ -127,14 +180,26 @@ const Modal = ({
                 <textarea
                   className="w-full h-20 p-2 border border-gray-400 rounded"
                   placeholder="Describe the ending direction..."
+                  value={endingDirection}
+                  onChange={(e) => setEndingDirection(e.target.value)}
                 />
               </div>
               {/* Generate Story Button */}
               <div className="flex justify-end space-x-4">
-                <GenerateStoryButton
-                  onGenerate={() => alert("Story generation functionality coming soon!")}
-                />
+                <GenerateStoryButton onGenerate={handleContinueStory} />
               </div>
+              {/* Display Continuation */}
+              {continuation && (
+                <div className="mt-6 p-4 border border-gray-300 rounded bg-gray-50">
+                  <h4 className="text-lg font-bold mb-2">Continuation:</h4>
+                  <p className="text-blue-500">{continuation}</p>
+                  {/* Save and Discard Buttons */}
+                  <div className="flex justify-end space-x-4 mt-4">
+                    <SaveStoryButton onSave={saveContinuation} />
+                    <DiscardStoryButton onDiscard={discardContinuation} />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -150,6 +215,7 @@ Modal.propTypes = {
   genre: PropTypes.string,
   description: PropTypes.string,
   story: PropTypes.string,
+  storyLength: PropTypes.string.isRequired,
   storyId: PropTypes.number.isRequired,
   onDelete: PropTypes.func.isRequired,
 };

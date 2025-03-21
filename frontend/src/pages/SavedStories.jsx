@@ -90,6 +90,7 @@ const SavedStories = () => {
             genre={selectedStory?.genre}
             description={selectedStory?.description}
             story={selectedStory?.story}
+            storyLength={selectedStory?.length}
             storyId={selectedStory?.id}
             onDelete={handleDeleteStory}
           />

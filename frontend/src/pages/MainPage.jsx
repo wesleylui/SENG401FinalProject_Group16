@@ -10,6 +10,7 @@ import TTSControls from "../components/TTSControls";
 import SaveStoryButton from "../components/SaveStoryButton";
 import DiscardStoryButton from "../components/DiscardStoryButton";
 import GenerateStoryButton from "../components/GenerateStoryButton";
+import { handleSave, handleDiscard } from "../utils/storyHandlers";
 
 const MainPage = () => {
   const { userId, isGuest, logout } = useAuth();
@@ -51,56 +52,46 @@ const MainPage = () => {
     }
   };
 
-  const handleSave = () => {
-    if (isGuest || !userId) {
-      setGuestMessage(
-        <>
-          <Link
-            to="/"
-            onClick={() => logout()}
-            className="text-blue-500 underline"
-          >
-            Create an account
-          </Link>{" "}
-          to save your story.
-        </>
-      );
-      return;
-    }
-
-    if (!storyTitle || !storyGenre || !storyDescription || !story) {
-      alert(
-        "Title, genre, description, and story are required to save the story."
-      );
-      return;
-    }
-
-    // Save story logic (only if userId exists)
-    const payload = {
+  const saveStory = () => {
+    handleSave({
       userId,
       storyTitle,
       storyLength,
       storyGenre,
       storyDescription,
       story,
-    };
-
-    axios
-      .post(`${backendUrl}/save-story`, payload)
-      .then(() => alert("Story saved successfully!"))
-      .catch((err) => {
-        console.error("Error saving story:", err.response?.data || err);
-        alert("Failed to save the story. Please try again.");
-      });
+      backendUrl,
+      onSuccess: (message) => alert(message),
+      onError: (errorMessage) => {
+        if (isGuest) {
+          setGuestMessage(
+            <>
+              <Link
+                to="/"
+                onClick={() => logout()}
+                className="text-blue-500 underline"
+              >
+                Create an account
+              </Link>{" "} 
+              to save your story.
+            </>
+          );
+        } else {
+          alert(errorMessage);
+        }
+      },
+    });
   };
 
-  const handleDiscard = () => {
-    setStoryDescription("");
-    setStoryLength("");
-    setStoryGenre("");
-    setStory("");
-    setStoryTitle("");
-    setGuestMessage("");
+  const discardStory = () => {
+    handleDiscard({
+      setStoryTitle,
+      setStoryLength,
+      setStoryGenre,
+      setStoryDescription,
+      setStory,
+      setGuestMessage,
+    });
   };
 
   return (
@@ -171,8 +162,8 @@ const MainPage = () => {
                   setStoryTitle={setStoryTitle}
                 />
                 <div className="flex justify-center space-x-4 mt-4">
-                  <SaveStoryButton onSave={handleSave} />
-                  <DiscardStoryButton onDiscard={handleDiscard} />
+                  <SaveStoryButton onSave={saveStory} />
+                  <DiscardStoryButton onDiscard={discardStory} />
                 </div>
                 {guestMessage && (
                   <div className="text-center mt-4 text-red-500">

@@ -9,27 +9,23 @@ const model = genAI.getGenerativeModel({
 });
 
 // generate story from gemini
-const generate = async (
-  storyLength,
-  storyGenre,
-  storyDescription
-) => {
+const generate = async (storyLength, storyGenre, storyDescription) => {
   const modified_prompt = `Write an up to ${storyLength} word story in a ${storyGenre} style based on the following description: "${storyDescription}". Please respond with the title surrounded by quotes ("") followed by the story.`;
   console.log("Sending prompt to Gemini API:", modified_prompt);
 
   try {
     const response = await model.generateContent(modified_prompt);
-    
-    console.log("Response from Gemini API:", response.response.text());
-    
-    const regex = /^"([^"]+)"\s*(.*)$/s;
-    const match = (response.response.text()).match(regex);
 
-    const storyTitle = match[1];  
-    const story = match[2];       
+    console.log("Response from Gemini API:", response.response.text());
+
+    const regex = /^"([^"]+)"\s*(.*)$/s;
+    const match = response.response.text().match(regex);
+
+    const storyTitle = match[1];
+    const story = match[2];
     if (!match) {
-        console.error('Response title or story improperly formatted');
-        // throw new error;
+      console.error("Response title or story improperly formatted");
+      // throw new error;
     }
 
     return { storyTitle, story };
@@ -122,4 +118,10 @@ const deleteStoryById = async (id) => {
   }
 };
 
-module.exports = { generate, continueStory, getStoriesByUserId, saveStory, deleteStoryById };
+module.exports = {
+  generate,
+  continueStory,
+  getStoriesByUserId,
+  saveStory,
+  deleteStoryById,
+};

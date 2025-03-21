@@ -56,6 +56,7 @@ app.post("/generate", storyController.generate);
 app.get("/stories/:userId", storyController.getStoriesByUserId);
 app.post("/save-story", storyController.saveStory);
 app.delete("/stories/:id", storyController.deleteStoryById);
+app.post("/continueStory", storyController.continueStory);
 
 // Add this to server.js
 app.get("/health", (req, res) => {

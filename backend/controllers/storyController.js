@@ -84,4 +84,37 @@ const deleteStoryById = async (req, res) => {
   }
 };
 
-module.exports = { generate, getStoriesByUserId, saveStory, deleteStoryById };
+const continueStory = async (req, res) => {
+  try {
+    const {
+      originalStory,
+      storyLength,
+      storyGenre,
+      plotProgression,
+      newCharacter,
+      moral,
+      endingDirection,
+    } = req.body;
+
+    console.log("Received payload in continueStory:", req.body);
+
+    const { continuation } = await storyService.continueStory(
+      originalStory,
+      storyLength,
+      storyGenre,
+      plotProgression,
+      newCharacter,
+      moral,
+      endingDirection
+    );
+
+    console.log(`Generated continuation: ${continuation}`);
+
+    res.status(201).json({ continuation });
+  } catch (error) {
+    console.error("Story continuation error:", error);
+    res.status(500).json({ error: "Story continuation failed" });
+  }
+};
+
+module.exports = { generate, getStoriesByUserId, saveStory, deleteStoryById, continueStory };
