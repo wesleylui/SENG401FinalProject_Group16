@@ -92,3 +92,42 @@ export const generateStory = async ({
     onError("Error generating story. Please try again.");
   }
 };
+
+export const continueStory = async ({
+  originalStory,
+  storyLength,
+  storyGenre,
+  plotProgression,
+  newCharacter,
+  moral,
+  endingDirection,
+  backendUrl,
+  onSuccess,
+  onError,
+}) => {
+  try {
+    const response = await axios.post(`${backendUrl}/continueStory`, {
+      originalStory,
+      storyLength,
+      storyGenre,
+      plotProgression,
+      newCharacter,
+      moral,
+      endingDirection,
+    });
+    onSuccess(response.data.continuation);
+  } catch (error) {
+    console.error("Error continuing story:", error.response?.data || error);
+    onError("Failed to generate continuation. Please try again.");
+  }
+};
+
+export const fetchSavedStories = async ({ userId, backendUrl, onSuccess, onError }) => {
+  try {
+    const response = await axios.get(`${backendUrl}/stories/${userId}`);
+    onSuccess(response.data);
+  } catch (error) {
+    console.error("Error fetching saved stories:", error.response?.data || error);
+    onError("Failed to fetch saved stories. Please try again.");
+  }
+};
