@@ -46,9 +46,9 @@ const saveStory = async (req, res) => {
     } = req.body;
 
     // Validate input
-    if (!userId || !storyTitle || !storyDescription || !story) {
-      console.error("Validation failed: Missing required fields");
-      return res.status(400).json({ error: "All fields are required" });
+    if (!userId || !storyTitle.trim() || !storyDescription.trim() || !story.trim()) {
+      console.error("Validation failed: Missing or invalid required fields");
+      return res.status(400).json({ error: "All fields are required and cannot be empty." });
     }
 
     await storyService.saveStory(
@@ -61,7 +61,7 @@ const saveStory = async (req, res) => {
     );
     res.status(201).json({ message: "Story saved successfully" });
   } catch (error) {
-    console.error("Error saving story:", error);
+    console.error("Error saving story:", error.message, { stack: error.stack }); // Add more context
     res.status(500).json({ error: "Failed to save story" });
   }
 };

@@ -16,10 +16,8 @@ export const handleSave = async ({
     return;
   }
 
-  if (!storyTitle || !storyDescription || !story) {
-    onError(
-      "All fields (title, description, and story) are required to save the story."
-    );
+  if (!storyTitle.trim() || !storyDescription.trim() || !story.trim()) {
+    onError("Title, description, and story cannot be empty or whitespace.");
     return;
   }
 
@@ -37,7 +35,7 @@ export const handleSave = async ({
     onSuccess("Story saved successfully!");
   } catch (err) {
     console.error("Error saving story:", err.response?.data || err);
-    onError("Failed to save the story. Please try again.");
+    onError("Failed to save the story. Please check your internet connection and try again.");
   }
 };
 

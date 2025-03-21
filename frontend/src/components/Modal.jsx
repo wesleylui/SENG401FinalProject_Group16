@@ -76,11 +76,10 @@ const Modal = ({
 
     const { success, error } = await deleteStory(storyId, backendUrl);
     if (success) {
-      alert("Story deleted successfully!");
-      onDelete(storyId);
+      onDelete(storyId); // Notify parent component
       onClose();
     } else {
-      alert(error);
+      alert(error); // Show error alert only
     }
   };
 

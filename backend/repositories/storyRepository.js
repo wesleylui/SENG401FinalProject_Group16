@@ -80,7 +80,10 @@ const saveStory = (
       [userId, storyTitle, storyLength, storyGenre, description, story],
       (err, result) => {
         if (err) {
-          console.error("Database error in saveStory:", err);
+          console.error("Database error in saveStory:", err.message, {
+            query: sql,
+            parameters: [userId, storyTitle, storyLength, storyGenre, description, story],
+          });
           return reject(err);
         }
         resolve(result);

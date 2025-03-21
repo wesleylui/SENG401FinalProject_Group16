@@ -40,8 +40,9 @@ const SavedStories = () => {
       setStories((prevStories) =>
         prevStories.filter((story) => story.id !== storyId)
       );
+      alert("Story deleted successfully!"); // Show success alert here
     } else {
-      console.error(error);
+      alert(error); // Show error alert
     }
   };
 
