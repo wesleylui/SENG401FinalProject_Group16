@@ -56,3 +56,13 @@ export const handleDiscard = ({
   setStory("");
   setGuestMessage && setGuestMessage("");
 };
+
+export const deleteStory = async (storyId, backendUrl) => {
+  try {
+    await axios.delete(`${backendUrl}/stories/${storyId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting story:", error.response?.data || error);
+    return { success: false, error: error.response?.data?.error || "Failed to delete the story." };
+  }
+};

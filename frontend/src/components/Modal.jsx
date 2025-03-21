@@ -9,7 +9,7 @@ import AdditionalContentInput from "./AdditionalContentInput";
 import NewCharacterInput from "./NewCharacterInput";
 import MoralInput from "./MoralInput";
 import EndingDirectionInput from "./EndingDirectionInput";
-import { handleSave, handleDiscard } from "../utils/storyHandlers";
+import { handleSave, handleDiscard, deleteStory } from "../utils/storyHandlers";
 
 const Modal = ({
   show,
@@ -48,14 +48,17 @@ const Modal = ({
       : import.meta.env.VITE_BACKEND_URL;
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`${backendUrl}/stories/${storyId}`);
+    if (!window.confirm("Are you sure you want to delete this story?")) {
+      return;
+    }
+
+    const { success, error } = await deleteStory(storyId, backendUrl);
+    if (success) {
       alert("Story deleted successfully!");
       onDelete(storyId);
       onClose();
-    } catch (error) {
-      console.error("Error deleting story:", error);
-      alert("Failed to delete the story. Please try again.");
+    } else {
+      alert(error);
     }
   };
 
