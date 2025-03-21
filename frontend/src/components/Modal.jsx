@@ -45,7 +45,7 @@ const Modal = ({
   };
 
   return (
-    <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center">
+    <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center mt-16">
       <div className="bg-white p-8 rounded shadow-lg w-[50vw] h-[80vh] relative">
         {/* Delete Story button in the top-left */}
         <button
@@ -65,7 +65,11 @@ const Modal = ({
               className="bg-blue-500 p-3 rounded-full shadow-lg hover:bg-blue-600 transition"
               onClick={handleReadStory}
             >
-              <FontAwesomeIcon icon={faVolumeUp} size="lg" className="text-black" />
+              <FontAwesomeIcon
+                icon={faVolumeUp}
+                size="lg"
+                className="text-black"
+              />
             </button>
           </div>
           <span className="text-lg text-gray-600">{genre}</span>

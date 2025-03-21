@@ -15,7 +15,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
           <input
             type="radio"
             name="storyGenre"
-            value="fairy tale"
+            value="Fairy Tale"
             className="hidden"
             checked={storyGenre === "Fairy Tale"}
             onChange={(e) => setStoryGenre(e.target.value)}
@@ -32,7 +32,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
           <input
             type="radio"
             name="storyGenre"
-            value="lullaby"
+            value="Lullaby"
             className="hidden"
             checked={storyGenre === "Lullaby"}
             onChange={(e) => setStoryGenre(e.target.value)}
@@ -49,7 +49,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
           <input
             type="radio"
             name="storyGenre"
-            value="fiction"
+            value="Fiction"
             className="hidden"
             checked={storyGenre === "Fiction"}
             onChange={(e) => setStoryGenre(e.target.value)}

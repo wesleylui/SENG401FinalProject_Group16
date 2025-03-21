@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
 import StoryTitleSelector from "../components/StoryTitleSelector";
@@ -7,13 +8,14 @@ import StoryGenreSelector from "../components/StoryGenreSelector";
 import { useAuth } from "../context/AuthContext";
 
 const MainPage = () => {
-  const { userId } = useAuth();
+  const { userId, isGuest, logout } = useAuth();
   const [storyDescription, setStoryDescription] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
   const [storyLength, setStoryLength] = useState("");
   const [storyGenre, setStoryGenre] = useState("");
   const [error, setError] = useState("");
   const [story, setStory] = useState(null);
+  const [guestMessage, setGuestMessage] = useState("");
 
   const backendUrl =
     import.meta.env.ENV === "local"
@@ -23,6 +25,7 @@ const MainPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setGuestMessage("");
 
     if (!storyGenre || !storyLength || !storyDescription) {
       setError("All fields (genre, length, and description) are required");
@@ -44,7 +47,23 @@ const MainPage = () => {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
+    if (isGuest || !userId) {
+      setGuestMessage(
+        <>
+          <Link
+            to="/"
+            onClick={() => logout()}
+            className="text-blue-500 underline"
+          >
+            Create an account
+          </Link>{" "}
+          to save your story.
+        </>
+      );
+      return;
+    }
+
     if (!storyTitle || !storyGenre || !storyDescription || !story) {
       alert(
         "Title, genre, description, and story are required to save the story."
@@ -52,22 +71,23 @@ const MainPage = () => {
       return;
     }
 
-    try {
-      const payload = {
-        userId,
-        storyTitle,
-        storyLength,
-        storyGenre,
-        storyDescription,
-        story,
-      };
+    // Save story logic (only if userId exists)
+    const payload = {
+      userId,
+      storyTitle,
+      storyLength,
+      storyGenre,
+      storyDescription,
+      story,
+    };
 
-      await axios.post(`${backendUrl}/save-story`, payload);
-      alert("Story saved successfully!");
-    } catch (err) {
-      console.error("Error saving story:", err.response?.data || err);
-      alert("Failed to save the story. Please try again.");
-    }
+    axios
+      .post(`${backendUrl}/save-story`, payload)
+      .then(() => alert("Story saved successfully!"))
+      .catch((err) => {
+        console.error("Error saving story:", err.response?.data || err);
+        alert("Failed to save the story. Please try again.");
+      });
   };
 
   const handleDiscard = () => {
@@ -76,6 +96,7 @@ const MainPage = () => {
     setStoryGenre("");
     setStory("");
     setStoryTitle("");
+    setGuestMessage("");
   };
 
   return (
@@ -163,6 +184,11 @@ const MainPage = () => {
                     Discard Story
                   </button>
                 </div>
+                {guestMessage && (
+                  <div className="text-center mt-4 text-red-500">
+                    {guestMessage}
+                  </div>
+                )}
               </div>
             )}
           </div>
