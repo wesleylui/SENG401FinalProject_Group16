@@ -7,7 +7,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
       <div className="flex justify-center space-x-4">
         <label
           className={`px-4 py-2 border rounded cursor-pointer ${
-            storyGenre === "fairy tale"
+            storyGenre === "Fairy Tale"
               ? "bg-blue-500 text-white"
               : "bg-white text-black"
           }`}
@@ -24,7 +24,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
         </label>
         <label
           className={`px-4 py-2 border rounded cursor-pointer ${
-            storyGenre === "lullaby"
+            storyGenre === "Lullaby"
               ? "bg-blue-500 text-white"
               : "bg-white text-black"
           }`}
@@ -41,7 +41,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
         </label>
         <label
           className={`px-4 py-2 border rounded cursor-pointer ${
-            storyGenre === "fiction"
+            storyGenre === "Fiction"
               ? "bg-blue-500 text-white"
               : "bg-white text-black"
           }`}
