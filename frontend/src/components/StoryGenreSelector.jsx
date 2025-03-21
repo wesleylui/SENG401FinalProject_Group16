@@ -17,7 +17,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
             name="storyGenre"
             value="fairy tale"
             className="hidden"
-            checked={storyGenre === "fairy tale"}
+            checked={storyGenre === "Fairy Tale"}
             onChange={(e) => setStoryGenre(e.target.value)}
           />
           Fairy Tale
@@ -34,7 +34,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
             name="storyGenre"
             value="lullaby"
             className="hidden"
-            checked={storyGenre === "lullaby"}
+            checked={storyGenre === "Lullaby"}
             onChange={(e) => setStoryGenre(e.target.value)}
           />
           Lullaby
@@ -51,7 +51,7 @@ const StoryGenreSelector = ({ storyGenre, setStoryGenre }) => {
             name="storyGenre"
             value="fiction"
             className="hidden"
-            checked={storyGenre === "fiction"}
+            checked={storyGenre === "Fiction"}
             onChange={(e) => setStoryGenre(e.target.value)}
           />
           Fiction
