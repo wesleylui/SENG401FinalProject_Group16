@@ -4,7 +4,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
-  const { isAuthenticated, isGuest, logout, userId } = useAuth();
+  const { isGuest, userId } = useAuth();
   const location = useLocation();
 
   return (

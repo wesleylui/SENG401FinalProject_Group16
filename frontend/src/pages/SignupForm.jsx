@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
 
 const SignupForm = () => {
   const [username, setUsername] = useState("");
@@ -54,7 +53,9 @@ const SignupForm = () => {
         }, 2000);
       }
     } catch (error) {
-      setError(error.response?.data?.error || "Signup failed. Please try again.");
+      setError(
+        error.response?.data?.error || "Signup failed. Please try again."
+      );
       setUsername("");
       setPassword("");
       setConfirmPassword("");

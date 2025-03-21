@@ -1,7 +1,18 @@
 import PropTypes from "prop-types";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faVolumeUp } from "@fortawesome/free-solid-svg-icons";
 
-const Modal = ({ show, onClose, title, genre, description, story, storyId, onDelete }) => {
+const Modal = ({
+  show,
+  onClose,
+  title,
+  genre,
+  description,
+  story,
+  storyId,
+  onDelete,
+}) => {
   if (!show) {
     return null;
   }
@@ -23,10 +34,19 @@ const Modal = ({ show, onClose, title, genre, description, story, storyId, onDel
     }
   };
 
+  const handleReadStory = () => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(story);
+      utterance.lang = "en-US";
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Text-to-Speech is not supported in this browser.");
+    }
+  };
+
   return (
     <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center">
       <div className="bg-white p-8 rounded shadow-lg w-[50vw] h-[80vh] relative">
-
         {/* Delete Story button in the top-left */}
         <button
           className="absolute top-2 left-2 text-sm text-red-500 hover:text-red-700"
@@ -38,10 +58,17 @@ const Modal = ({ show, onClose, title, genre, description, story, storyId, onDel
           &times;
         </button>
         <div className="overflow-y-auto h-full pt-8 pr-8">
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between items-center mb-4">
             <span className="font-bold text-xl">{title}</span>
-            <span className="text-lg text-gray-600">{genre}</span>
+            {/* Read Story Button */}
+            <button
+              className="bg-blue-500 p-3 rounded-full shadow-lg hover:bg-blue-600 transition"
+              onClick={handleReadStory}
+            >
+              <FontAwesomeIcon icon={faVolumeUp} size="lg" className="text-black" />
+            </button>
           </div>
+          <span className="text-lg text-gray-600">{genre}</span>
           <p className="mb-4">{description}</p> {/* Display description */}
           <textarea
             className="w-full h-full max-h-96 p-2 border border-gray-300 rounded resize-none"
