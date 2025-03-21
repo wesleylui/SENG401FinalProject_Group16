@@ -5,6 +5,10 @@ import TTSControls from "./TTSControls";
 import SaveStoryButton from "./SaveStoryButton";
 import DiscardStoryButton from "./DiscardStoryButton";
 import GenerateStoryButton from "./GenerateStoryButton";
+import AdditionalContentInput from "./AdditionalContentInput";
+import NewCharacterInput from "./NewCharacterInput";
+import MoralInput from "./MoralInput";
+import EndingDirectionInput from "./EndingDirectionInput";
 import { handleSave, handleDiscard } from "../utils/storyHandlers";
 
 const Modal = ({
@@ -152,54 +156,19 @@ const Modal = ({
           {showContinueBox && (
             <div className="mt-6 p-4 border border-gray-300 rounded bg-gray-100">
               <h3 className="text-lg font-bold mb-4">Continue Your Story</h3>
-              {/* Plot Progression */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  What should happen next in the story?
-                </label>
-                <textarea
-                  className="w-full h-20 p-2 border border-gray-400 rounded"
-                  placeholder="Describe the next part of the plot..."
-                  value={additionalContent}
-                  onChange={(e) => setAdditionalContent(e.target.value)}
-                />
-              </div>
-              {/* Introduce a New Character */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Introduce a new character (optional)
-                </label>
-                <textarea
-                  className="w-full h-20 p-2 border border-gray-400 rounded"
-                  placeholder="Describe the new character..."
-                  value={newCharacter}
-                  onChange={(e) => setNewCharacter(e.target.value)}
-                />
-              </div>
-              {/* Morals */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Should this part of the story include a moral or lesson?
-                </label>
-                <textarea
-                  className="w-full h-20 p-2 border border-gray-400 rounded"
-                  placeholder="Describe the moral or lesson..."
-                  value={moral}
-                  onChange={(e) => setMoral(e.target.value)}
-                />
-              </div>
-              {/* Ending Direction */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  How should this part of the story end?
-                </label>
-                <textarea
-                  className="w-full h-20 p-2 border border-gray-400 rounded"
-                  placeholder="Describe the ending direction..."
-                  value={endingDirection}
-                  onChange={(e) => setEndingDirection(e.target.value)}
-                />
-              </div>
+              <AdditionalContentInput
+                value={additionalContent}
+                onChange={setAdditionalContent}
+              />
+              <NewCharacterInput
+                value={newCharacter}
+                onChange={setNewCharacter}
+              />
+              <MoralInput value={moral} onChange={setMoral} />
+              <EndingDirectionInput
+                value={endingDirection}
+                onChange={setEndingDirection}
+              />
               {/* Generate Story Button */}
               <div className="flex justify-end space-x-4">
                 <GenerateStoryButton onGenerate={handleContinueStory} />

@@ -36,7 +36,7 @@ export const handleSave = async ({
     await axios.post(`${backendUrl}/save-story`, payload);
     onSuccess("Story saved successfully!");
   } catch (err) {
-    console.error("Error saving story:", err.response?.data || err); // Log error in terminal
+    console.error("Error saving story:", err.response?.data || err);
     onError("Failed to save the story. Please try again.");
   }
 };
