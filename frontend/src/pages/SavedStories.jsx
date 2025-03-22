@@ -58,16 +58,16 @@ const SavedStories = () => {
       <Header />
       <div
         className={`flex ${
-          showModal ? "sm:flex-col md:flex-row" : "flex-row"
-        } gap-10 transition-all duration-700 mt-20`}
+          showModal ? "max-md:flex-col md:flex-row" : "flex-row"
+        }  md:gap-10 mt-20`}
       >
         {/* Stories List */}
         <div
           className={`bg-gray-100 p-6 rounded shadow-lg overflow-auto max-h-[80vh] transition-all duration-700 ease-in-out
-          ${showModal ? "sm:hidden md:block" : "block"}`}
+          ${showModal ? "max-md:hidden md:block" : "block"}`}
         >
           <h2 className="text-2xl font-bold mb-8 mt-8">Saved Stories</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             {stories.length === 0 ? (
               <p className="text-gray-500 text-center col-span-full">
                 No saved stories
@@ -89,9 +89,8 @@ const SavedStories = () => {
 
         {/* Modal */}
         <div
-          className={`transition-all duration-700 ease-in-out
-          ${showModal ? "opacity-100 scale-100" : "opacity-0 scale-90"}
-          ${showModal ? "w-full sm:w-full md:max-w-[70vw]" : "hidden"}`}
+          className={`transition-all duration-700 ease-in-out w-full
+          ${showModal ? "opacity-100 scale-100" : "hidden opacity-0 scale-90"}`}
         >
           <Modal
             show={showModal}
