@@ -12,6 +12,8 @@ describe('User Controller', () => {
     jest.clearAllMocks(); // Clear mocks after each test
   });
 
+  // Test - 1
+  // (Requirement-ID 2 from Requirements Traceability Matrix)
   describe('signup', () => {
     it('should return 201 and success message when signup is successful', async () => {
       // Mock the userService.signup function
@@ -54,6 +56,8 @@ describe('User Controller', () => {
     });
   });
 
+  // Test - 2
+  // (Requirement-ID 1 from Requirements Traceability Matrix)
   describe('login', () => {
     it('should return 200 and user details when login is successful', async () => {
       // Mock the userService.login function
