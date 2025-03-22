@@ -69,7 +69,9 @@ const SavedStories = () => {
           <h2 className="text-2xl font-bold mb-8 mt-8">Saved Stories</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {stories.length === 0 ? (
-              <p className="text-gray-500 text-center col-span-full">No saved stories</p>
+              <p className="text-gray-500 text-center col-span-full">
+                No saved stories
+              </p>
             ) : (
               stories.map((story) => (
                 <div
