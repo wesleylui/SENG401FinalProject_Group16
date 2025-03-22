@@ -158,22 +158,19 @@ const Modal = ({
             readOnly
             value={story}
           />
-          {/* Delete Story Button */}
-          <div className="flex justify-end mt-4">
-            <button
-              className="text-sm text-red-500 hover:text-red-700"
-              onClick={handleDelete}
-            >
-              Delete Story
-            </button>
-          </div>
-          {/* Continue Story Button */}
-          <div className="flex justify-center mt-4">
+          {/* Continue and Delete Story Buttons */}
+          <div className="flex justify-center mt-4 space-x-4">
             <button
               className="bg-blue-500 text-black py-2 px-6 rounded hover:bg-blue-600 transition"
               onClick={() => setShowContinueBox(true)}
             >
               Continue Story
+            </button>
+            <button
+              className="text-red-500 hover:text-red-700"
+              onClick={handleDelete}
+            >
+              Delete Story
             </button>
           </div>
           {/* Continue Story Box */}
