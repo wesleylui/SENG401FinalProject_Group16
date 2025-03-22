@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } = require("@google/generative-ai");
 const db = require("../config/db");
 const storyRepository = require("../repositories/storyRepository");
 
@@ -6,27 +6,73 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
 const model = genAI.getGenerativeModel({
   model: process.env.GEMINI_MODEL,
   systemInstruction: "You are a storyteller. You are the narrator.",
+  safetySettings: [
+    {
+      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+      threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+  ]
 });
+
+const HARMFUL_THEMES = [
+  "HARASSMENT",
+  "HATESPEECH",
+  "SEXUALLY EXPLICIT",
+  "DANGEROUS CONTENT"
+];
+
 
 // generate story from gemini
 const generate = async (storyLength, storyGenre, storyDescription) => {
-  const modified_prompt = `Write an up to ${storyLength} word bedtime story in a ${storyGenre} style based on the following description: "${storyDescription}". Please respond with the title surrounded by quotes ("") followed by the story. Stories suitable for children aged 3-8, focusing on relatable experiences. `;
+  const modified_prompt = `
+  Write a story based on the following description: "${storyDescription}". 
+
+  The story should be:
+  - Up to ${storyLength} words long
+  - In a ${storyGenre} style
+  - Suitable for children aged 3-8
+  - Focused on relatable experiences
+
+  Format:
+  - Title in quotes (""), followed by the story content
+  - If the requested content contains harmful themes, respond with a list of the themes it violates: 
+    - ${HARMFUL_THEMES.join("\n\t- ")}
+  `;
+  
   console.log("Sending prompt to Gemini API:", modified_prompt);
 
   try {
     const response = await model.generateContent(modified_prompt);
-
     console.log("Response from Gemini API:", response.response.text());
 
+    checkForHarmfulThemes(response.response.text());
+
+    // Title separation
     const regex = /^"([^"]+)"\s*(.*)$/s;
     const match = response.response.text().match(regex);
 
+    if (!match) {
+      throw new Error("Response story improperly formatted");
+    }
+
     const storyTitle = match[1];
     const story = match[2];
-    if (!match) {
-      console.error("Response title or story improperly formatted");
-      // throw new error;
-    }
 
     return { storyTitle, story };
   } catch (error) {
@@ -45,12 +91,26 @@ const continueStory = async (
   moral,
   endingDirection
 ) => {
-  const modified_prompt = `Please respond with the continuation of the story: "${originalStory}". 
-What happens next is: "${plotProgression}". 
-Introduce a new character: "${newCharacter}". 
-Include a moral or lesson: "${moral}". 
-The story should end as follows: "${endingDirection}". 
-Write this continuation in up to ${storyLength} words in a ${storyGenre} style.`;
+  const modified_prompt = `
+  Please respond with the continuation of the story: "${originalStory}". 
+
+  In this continuation:
+  - What happens next is: "${plotProgression}"
+  - Introduce a new character: "${newCharacter}"
+  - Include a moral or lesson: "${moral}"
+  - The story should end as follows: "${endingDirection}"
+
+  The story should be:
+  - Up to ${storyLength} words long
+  - In a ${storyGenre} style
+  - Suitable for children aged 3-8
+  - Focused on relatable experiences
+
+  Format:
+  - Only by the story content
+  - If the requested content contains harmful themes, respond with a list of the themes it violates: 
+    - ${HARMFUL_THEMES.join("\n\t- ")}
+  `;
 
   console.log("Sending continuation prompt to Gemini API:", modified_prompt);
 
@@ -58,10 +118,11 @@ Write this continuation in up to ${storyLength} words in a ${storyGenre} style.`
     const response = await model.generateContent(modified_prompt);
     console.log("Response from Gemini API:", response.response.text());
 
+    checkForHarmfulThemes(response.response.text());
+
     const continuation = response.response.text();
     if (!continuation) {
-      console.error("Response continuation improperly formatted");
-      // throw new error;
+      throw new Error("Response continuation improperly formatted");
     }
 
     return { continuation };
@@ -70,6 +131,18 @@ Write this continuation in up to ${storyLength} words in a ${storyGenre} style.`
     throw error;
   }
 };
+
+// check for any harmful themes in the story
+const checkForHarmfulThemes = (responseText) => {
+  const detectedThemes = HARMFUL_THEMES.filter((theme) =>
+    responseText.includes(theme)
+  );
+
+  if (detectedThemes.length > 0) {
+    throw new Error(`Harmful content detected: ${detectedThemes.join(", ")}`);
+  }
+};
+
 
 // get all stories attached to a userId
 const getStoriesByUserId = async (userId) => {
