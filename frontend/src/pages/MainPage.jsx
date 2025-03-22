@@ -31,7 +31,7 @@ const MainPage = () => {
     }
 
     try {
-      const response = await axios.post(`${backendUrl}"/generate"`, {
+      const response = await axios.post(`${backendUrl}/generate`, {
         storyLength,
         storyGenre,
         storyDescription,
@@ -77,7 +77,7 @@ const MainPage = () => {
 
       console.log("Saving story with payload:", payload); // Log the payload being sent
 
-      await axios.post(`${backendUrl}"/save-story"`, payload);
+      await axios.post(`${backendUrl}/save-story`, payload);
       alert("Story saved successfully!");
     } catch (err) {
       console.error("Error saving story:", err.response?.data || err);
