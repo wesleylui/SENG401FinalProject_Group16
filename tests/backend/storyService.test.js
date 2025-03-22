@@ -21,6 +21,7 @@ describe('Story Service - Actual Implementation', () => {
     jest.clearAllMocks(); // Clear mocks after each test
   });
 
+  // Test 1
   it('should fetch stories by user ID', async () => {
     // Mock the database query
     db.query.mockImplementation((sql, params, callback) => {
@@ -45,6 +46,7 @@ describe('Story Service - Actual Implementation', () => {
     ]);
   });
 
+  // Test 2
   it('should return an empty array when no stories exist for the given userId', async () => {
     // Mock the db.query function to return an empty result
     db.query.mockImplementation((sql, params, callback) => {
@@ -64,6 +66,7 @@ describe('Story Service - Actual Implementation', () => {
     expect(result).toEqual([]); // Expect an empty array
   });
 
+  // Test 3
   it('should throw an error if the database query fails', async () => {
     // Mock the db.query function to simulate a database error
     db.query.mockImplementation((sql, params, callback) => {
@@ -82,6 +85,8 @@ describe('Story Service - Actual Implementation', () => {
     );
   });
 
+  // Test 4
+  // (Requirement-ID 10 from Requirements Traceability Matrix)
   it('should save a story to the database', async () => {
     // Mock the repository function
     storyRepository.saveStory.mockResolvedValue({ success: true });
@@ -108,6 +113,7 @@ describe('Story Service - Actual Implementation', () => {
     expect(result).toEqual({ success: true });
   });
 
+  // Test 5
   it('should delete a story by ID', async () => {
     // Mock the repository function
     storyRepository.deleteStoryById.mockResolvedValue({ success: true });
@@ -120,6 +126,7 @@ describe('Story Service - Actual Implementation', () => {
     expect(result).toEqual({ success: true });
   });
 
+  // Test 6
   it('should throw an error while deleteing a story when the ID does not exist', async() => {
     // Mock the repository function
     storyRepository.deleteStoryById.mockRejectedValue(new Error("Error in deleteStoryById service:"));
@@ -128,6 +135,8 @@ describe('Story Service - Actual Implementation', () => {
     await expect(storyService.deleteStoryById(1)).rejects.toThrow("Error in deleteStoryById service:");
   });
 
+  // Test 7
+  // (Requirement-ID 7 from Requirements Traceability Matrix)
   it('should generate a story prompt and return a test story', async () => {
     // Define test inputs
     const storyTitle = 'My Story';
@@ -147,6 +156,7 @@ describe('Story Service - Actual Implementation', () => {
     expect(result).toBe('This is a test story.');
   });
 
+  // Test 8
   it('should throw an error when invalid parameters are provided', async () => {
     // Define invalid test inputs
     const storyTitle = ''; // Invalid: empty title
@@ -160,6 +170,7 @@ describe('Story Service - Actual Implementation', () => {
     ).rejects.toThrow('Invalid parameters provided');
   });
 
+  // Test 9
   it('should log the correct prompt to the console', async () => {
     // Spy on console.log
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
