@@ -141,8 +141,8 @@ const Modal = ({
   };
 
   return (
-    <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center mt-16">
-      <div className="bg-white p-8 rounded shadow-lg w-[50vw] h-[80vh] relative">
+    <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center">
+      <div className="bg-white p-8 rounded shadow-lg max-md:w-[90vw] md:w-[50vw] h-[80vh] relative">
         <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
           &times;
         </button>
@@ -158,23 +158,28 @@ const Modal = ({
             readOnly
             value={story}
           />
-          {/* Delete Story Button */}
-          <div className="flex justify-end mt-4">
-            <button
-              className="text-sm text-red-500 hover:text-red-700"
-              onClick={handleDelete}
-            >
-              Delete Story
-            </button>
-          </div>
-          {/* Continue Story Button */}
-          <div className="flex justify-center mt-4">
-            <button
-              className="bg-blue-500 text-black py-2 px-6 rounded hover:bg-blue-600 transition"
-              onClick={() => setShowContinueBox(true)}
-            >
-              Continue Story
-            </button>
+          <div className="flex flew-row justify-center gap 2">
+            <div className="flex-grow"></div> 
+            {/* Delete Story Button */}
+            <div className="flex justify-end mt-4">
+              <button
+                className="text-sm text-red-500 hover:text-red-700"
+                onClick={handleDelete}
+                >
+                Delete Story
+              </button>
+            </div>
+            <div className="flex-grow"></div> 
+            {/* Continue Story Button */}
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-blue-500 text-black py-2 px-6 rounded hover:bg-blue-600 transition"
+                onClick={() => setShowContinueBox(true)}
+                >
+                Continue Story
+              </button>
+            </div>
+            <div className="flex-grow"></div> 
           </div>
           {/* Continue Story Box */}
           {showContinueBox && (
