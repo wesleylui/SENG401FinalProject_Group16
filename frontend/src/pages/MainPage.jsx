@@ -1,98 +1,93 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "../components/Header";
+import axios from "axios";
 import StoryTitleSelector from "../components/StoryTitleSelector";
 import StoryLengthSelector from "../components/StoryLengthSelector";
 import StoryGenreSelector from "../components/StoryGenreSelector";
 import { useAuth } from "../context/AuthContext";
-import TTSControls from "../components/TTSControls";
-import SaveStoryButton from "../components/SaveStoryButton";
-import DiscardStoryButton from "../components/DiscardStoryButton";
-import GenerateStoryButton from "../components/GenerateStoryButton";
-import { generateStory, handleSave, handleDiscard } from "../utils/storyHandlers";
 
 const MainPage = () => {
-  const { userId, isGuest, logout } = useAuth();
+  const { userId } = useAuth(); // Get userId from AuthContext
   const [storyDescription, setStoryDescription] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
   const [storyLength, setStoryLength] = useState("");
   const [storyGenre, setStoryGenre] = useState("");
   const [error, setError] = useState("");
   const [story, setStory] = useState(null);
-  const [guestMessage, setGuestMessage] = useState("");
 
-  const backendUrl =
-    import.meta.env.ENV === "local"
-      ? "http://localhost:5050"
-      : import.meta.env.VITE_BACKEND_URL;
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setGuestMessage("");
 
-    generateStory({
-      storyLength,
-      storyGenre,
-      storyDescription,
-      backendUrl,
-      onSuccess: (data) => {
-        setStoryTitle(data.storyTitle);
-        setStory(data.story);
-      },
-      onError: (errorMessage) => setError(errorMessage),
-    });
+    // Error checking
+    if (!storyGenre || !storyLength || !storyDescription) {
+      setError(
+        "All fields (genre, length, and description) are required"
+      );
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5050/generate", {
+        storyLength,
+        storyGenre,
+        storyDescription,
+      });
+
+      const storyTitle = response.data.storyTitle;
+      const story = response.data.story;
+      setStoryTitle(storyTitle);
+      setStory(story);
+    } catch (err) {
+      console.error("Story generation error:", err);
+      setError("Error generating story. Please try again.");
+    }
   };
 
-  const saveStory = () => {
-    handleSave({
-      userId,
-      storyTitle,
-      storyLength,
-      storyGenre,
-      storyDescription,
-      story,
-      backendUrl,
-      onSuccess: (message) => alert(message),
-      onError: (errorMessage) => {
-        if (isGuest) {
-          setGuestMessage(
-            <>
-              <Link
-                to="/"
-                onClick={() => logout()}
-                className="text-blue-500 underline"
-              >
-                Create an account
-              </Link>{" "} 
-              to save your story.
-            </>
-          );
-        } else {
-          alert(errorMessage);
-        }
-      },
-    });
+  // Discarding story clears all input fields
+  const handleDiscard = () => {
+    setStoryDescription("");
+    setStoryLength("");
+    setStoryGenre("");
+    setStory("");
+    setStoryTitle("");
   };
 
-  const discardStory = () => {
-    handleDiscard({
-      setStoryTitle,
-      setStoryLength,
-      setStoryGenre,
-      setStoryDescription,
-      setStory,
-      setGuestMessage,
-    });
+  // saving story to db
+  const handleSave = async () => {
+    if (!storyTitle || !storyGenre || !storyDescription || !story) {
+      alert(
+        "Title, genre, description, and story are required to save the story."
+      );
+      return;
+    }
+
+    try {
+      const payload = {
+        userId,
+        storyTitle,
+        storyLength,
+        storyGenre,
+        storyDescription,
+        story: story,
+      };
+
+      console.log("Saving story with payload:", payload); // Log the payload being sent
+
+      await axios.post("http://localhost:5050/save-story", payload);
+      alert("Story saved successfully!");
+    } catch (err) {
+      console.error("Error saving story:", err.response?.data || err);
+      alert("Failed to save the story. Please try again.");
+    }
   };
 
   return (
     <div>
       <Header />
-      <h1 className="text-3xl font-bold md:mb-6 sm:mt-20 md:mt-24">
-        Story Generator
-      </h1>
-      <div className="flex sm:flex-col md:flex-row gap-10">
+      <h1 className="text-3xl font-bold md:mb-6 max-md:mt-20 md:mt-0">Story Generator</h1>
+      <div className="flex max-md:flex-col md:flex-row gap-10">
+
         <div className="flex flex-shrink justify-center pt-12">
           {/* padding bw header and h1*/}
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -121,51 +116,51 @@ const MainPage = () => {
               />
             </div>
             {/* Generate Story Button */}
-            <GenerateStoryButton onGenerate={handleSubmit} />
+            <button
+              type="submit"
+              className="bg-white text-black p-6 border border-gray-400 rounded w-full"
+            >
+              Generate Story
+            </button>
           </form>
         </div>
 
-        <div className="flex-1 flex-col">
-          {" "}
-          {/* Story section */}
-          <div
-            className={`transition-all duration-700 ease-in-out ${
-              story ? "opacity-100 scale-100" : "opacity-0 scale-90"
-            }`}
-          >
+        <div className="flex-1 flex-col"> {/* Story section */}
+          <div className={`transition-all duration-700 ease-in-out ${story ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
             {/* Generated Story Response Text */}
             {story && (
               <div className="mt-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {storyTitle}
-                </h2>
-                <p className="text-lg text-gray-600 mb-4">
-                  Genre: {storyGenre}
-                </p>
+                <h2 className="text-2xl font-bold text-gray-800">{storyTitle}</h2>
+                <p className="text-lg text-gray-600 mb-4">Genre: {storyGenre}</p>
                 <p className="text-blue-500 mb-3">{story}</p>
-                <TTSControls story={story} />
               </div>
             )}
             {/* Save Discard and Change Story Buttons */}
             {story && (
-              <div className="flex sm:flex-col md:flex-row justify-center space-x-4 mt-4">
+              <div className="flex max-md:flex-col md:flex-row justify-center space-x-4 mt-4">
                 <StoryTitleSelector
-                  storyTitle={storyTitle}
-                  setStoryTitle={setStoryTitle}
-                />
+                    storyTitle={storyTitle}
+                    setStoryTitle={setStoryTitle}
+                    />
                 <div className="flex justify-center space-x-4 mt-4">
-                  <SaveStoryButton onSave={saveStory} />
-                  <DiscardStoryButton onDiscard={discardStory} />
+                  <button
+                    className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
+                    onClick={handleSave}
+                    >
+                    Save Story
+                  </button>
+                  <button
+                    className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
+                    onClick={handleDiscard}
+                    >
+                    Discard Story
+                  </button>
                 </div>
-                {guestMessage && (
-                  <div className="text-center mt-4 text-red-500">
-                    {guestMessage}
-                  </div>
-                )}
               </div>
             )}
           </div>
         </div>
+
       </div>
     </div>
   );
