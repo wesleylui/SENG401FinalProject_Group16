@@ -1,99 +1,107 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import StoryTitleSelector from "../components/StoryTitleSelector";
 import StoryLengthSelector from "../components/StoryLengthSelector";
 import StoryGenreSelector from "../components/StoryGenreSelector";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
 import TTSControls from "../components/TTSControls";
+import SaveStoryButton from "../components/SaveStoryButton";
+import DiscardStoryButton from "../components/DiscardStoryButton";
+import GenerateStoryButton from "../components/GenerateStoryButton";
+import {
+  generateStory,
+  handleSave,
+  handleDiscard,
+} from "../utils/storyHandlers";
 
 const MainPage = () => {
-  const { userId } = useAuth(); // Get userId from AuthContext
+  const { userId, isGuest, logout } = useAuth();
   const [storyDescription, setStoryDescription] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
   const [storyLength, setStoryLength] = useState("");
   const [storyGenre, setStoryGenre] = useState("");
   const [error, setError] = useState("");
   const [story, setStory] = useState(null);
+  const [guestMessage, setGuestMessage] = useState("");
 
   const backendUrl =
     import.meta.env.ENV === "local"
       ? "http://localhost:5050"
       : import.meta.env.VITE_BACKEND_URL;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
+    setGuestMessage("");
 
-    // Error checking
-    if (!storyGenre || !storyLength || !storyDescription) {
-      setError("All fields (genre, length, and description) are required");
-      return;
-    }
-
-    try {
-      const response = await axios.post(`${backendUrl}/generate`, {
-        storyLength,
-        storyGenre,
-        storyDescription,
-      });
-
-      const storyTitle = response.data.storyTitle;
-      const story = response.data.story;
-      setStoryTitle(storyTitle);
-      setStory(story);
-    } catch (err) {
-      console.error("Story generation error:", err);
-      setError("Error generating story. Please try again.");
-    }
+    generateStory({
+      storyLength,
+      storyGenre,
+      storyDescription,
+      backendUrl,
+      onSuccess: (data) => {
+        setStoryTitle(data.storyTitle);
+        setStory(data.story);
+      },
+      onError: (errorMessage) => setError(errorMessage),
+    });
   };
 
-  // Discarding story clears all input fields
-  const handleDiscard = () => {
-    setStoryDescription("");
-    setStoryLength("");
-    setStoryGenre("");
-    setStory("");
-    setStoryTitle("");
+  const saveStory = () => {
+    handleSave({
+      userId,
+      storyTitle,
+      storyLength,
+      storyGenre,
+      storyDescription,
+      story,
+      backendUrl,
+      onSuccess: (message) => alert(message),
+      onError: (errorMessage) => {
+        if (isGuest) {
+          setGuestMessage(
+            <>
+              <Link
+                to="/"
+                onClick={() => logout()}
+                className="text-blue-500 underline"
+              >
+                Create an account
+              </Link>{" "}
+              to save your story.
+            </>
+          );
+        } else {
+          alert(errorMessage);
+        }
+      },
+    });
   };
 
-  // saving story to db
-  const handleSave = async () => {
-    if (!storyTitle || !storyGenre || !storyDescription || !story) {
-      alert(
-        "Title, genre, description, and story are required to save the story."
-      );
-      return;
-    }
-
-    try {
-      const payload = {
-        userId,
-        storyTitle,
-        storyLength,
-        storyGenre,
-        storyDescription,
-        story: story,
-      };
-
-      console.log("Saving story with payload:", payload); // Log the payload being sent
-
-      await axios.post(`${backendUrl}/save-story`, payload);
-      alert("Story saved successfully!");
-    } catch (err) {
-      console.error("Error saving story:", err.response?.data || err);
-      alert("Failed to save the story. Please try again.");
-    }
+  const discardStory = () => {
+    handleDiscard({
+      setStoryTitle,
+      setStoryLength,
+      setStoryGenre,
+      setStoryDescription,
+      setStory,
+      setGuestMessage,
+    });
   };
 
   return (
     <div>
       <Header />
-      <h1 className="text-3xl font-bold md:mb-6 max-md:mt-20 md:mt-20">
-        Story Generator
-      </h1>
-      <div className="flex max-md:flex-col md:flex-row gap-10">
-        <div className="flex flex-shrink justify-center pt-12">
+      <div className="pt-18">
+        {" "}
+        {/* Add padding between header and title */}
+        <h1 className="text-3xl font-bold md:mb-2 max-md:mt-20 md:mt-0">
+          Story Generator
+        </h1>
+      </div>
+      <div className="flex max-md:flex-col md:flex-row gap-8">
+        <div className="flex flex-shrink justify-center pt-8">
           {/* padding bw header and h1*/}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Length of Story Radio Buttons*/}
@@ -121,17 +129,11 @@ const MainPage = () => {
               />
             </div>
             {/* Generate Story Button */}
-            <button
-              type="submit"
-              className="bg-white text-black p-6 border border-gray-400 rounded w-full"
-            >
-              Generate Story
-            </button>
+            <GenerateStoryButton onGenerate={handleSubmit} />
           </form>
         </div>
 
         <div className="flex-1 flex-col">
-          {" "}
           {/* Story section */}
           <div
             className={`transition-all duration-700 ease-in-out ${
@@ -153,25 +155,20 @@ const MainPage = () => {
             )}
             {/* Save Discard and Change Story Buttons */}
             {story && (
-              <div className="flex max-md:flex-col md:flex-row justify-center space-x-4 mt-4">
+              <div className="flex sm:flex-col md:flex-row justify-center space-x-4 mt-4">
                 <StoryTitleSelector
                   storyTitle={storyTitle}
                   setStoryTitle={setStoryTitle}
                 />
                 <div className="flex justify-center space-x-4 mt-4">
-                  <button
-                    className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
-                    onClick={handleSave}
-                  >
-                    Save Story
-                  </button>
-                  <button
-                    className="bg-white text-black p-6 border border-gray-400 rounded hover:bg-gray-100"
-                    onClick={handleDiscard}
-                  >
-                    Discard Story
-                  </button>
+                  <SaveStoryButton onSave={saveStory} />
+                  <DiscardStoryButton onDiscard={discardStory} />
                 </div>
+                {guestMessage && (
+                  <div className="text-center mt-4 text-red-500">
+                    {guestMessage}
+                  </div>
+                )}
               </div>
             )}
           </div>

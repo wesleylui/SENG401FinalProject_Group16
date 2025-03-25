@@ -63,13 +63,15 @@ const SavedStories = () => {
       >
         {/* Stories List */}
         <div
-          className={`bg-gray-100 p-6 rounded shadow-lg overflow-auto max-h-[80vh]
+          className={`bg-gray-100 p-6 rounded shadow-lg overflow-auto max-h-[80vh] transition-all duration-700 ease-in-out
           ${showModal ? "max-md:hidden md:block" : "block"}`}
         >
           <h2 className="text-2xl font-bold mb-8 mt-8">Saved Stories</h2>
           <div className="grid grid-cols-1 gap-6">
             {stories.length === 0 ? (
-              <p className="text-gray-500 text-center col-span-full">No saved stories</p>
+              <p className="text-gray-500 text-center col-span-full">
+                No saved stories
+              </p>
             ) : (
               stories.map((story) => (
                 <div
@@ -87,7 +89,7 @@ const SavedStories = () => {
 
         {/* Modal */}
         <div
-          className={`transition-all duration-700 ease-in-out w-full 
+          className={`transition-all duration-700 ease-in-out w-full
           ${showModal ? "opacity-100 scale-100" : "hidden opacity-0 scale-90"}`}
         >
           <Modal

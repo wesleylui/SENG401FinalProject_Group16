@@ -55,12 +55,10 @@ const LoginForm = () => {
   return (
     <div>
       <Header />
-      <div className="flex sm:flex-col md:flex-row gap-10 items-center justify-center mt-10">
+      <div className="flex max-md:flex-col md:flex-row gap-10 items-center justify-center mt-10">
         {/* Left Column: App Name and Description */}
         <div className="flex-1 text-center md:text-left">
-          <h1 className="text-4xl font-bold text-black-600 mb-4">
-            S.T.O.R.Y
-          </h1>
+          <h1 className="text-4xl font-bold text-black-600 mb-4">S.T.O.R.Y</h1>
           <p className="text-lg text-gray-700">
             <strong>Smart Tales On Request for Youngsters</strong> is your
             personalized story generator. Create engaging, custom stories for
