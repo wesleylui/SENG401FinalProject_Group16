@@ -141,8 +141,8 @@ const Modal = ({
   };
 
   return (
-    <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center mt-16">
-      <div className="bg-white p-8 rounded shadow-lg w-[50vw] h-[80vh] relative">
+    <div className="flex inset-0 bg-white bg-opacity-90 justify-center items-center">
+      <div className="bg-white p-8 rounded shadow-lg w-[90vw] md:w-[50vw] h-[80vh] relative">
         <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
           &times;
         </button>
