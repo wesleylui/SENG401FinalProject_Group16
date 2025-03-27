@@ -149,8 +149,10 @@ const MainPage = () => {
                 <p className="text-lg text-gray-600 mb-4">
                   Genre: {storyGenre}
                 </p>
-                <p className="text-blue-500 mb-3">{story}</p>
-                <TTSControls story={story} />
+                <div className="flex flex-col items-center">
+                  <p className="text-blue-500 mb-3 text-center">{story}</p>
+                  <TTSControls story={story} />
+                </div>
               </div>
             )}
             {/* Save Discard and Change Story Buttons */}
