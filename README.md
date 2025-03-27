@@ -9,18 +9,23 @@ npm install
 ```
 
 ### Setup Environment
-Add required environment variables.
+To run this program locally, you'll need to add the required environment variables.
 Get a gemini API key [here](https://aistudio.google.com/prompts/new_chat)
 ```bash;
-DATABASE_URL="mysql://root:goSaShAHwUcqmjnRBBGTjgoCeKQGNbTt@hopper.proxy.rlwy.net:55825/railway"
+# gemini api
+GEMINI_API="" # insert your API key here
+GEMINI_MODEL="gemini-2.0-flash"
+
+# local database hosting
+MYSQLHOST=localhost
+MYSQLUSER=root
+MYSQLPASSWORD="" # enter your mysql password here
+MYSQLDATABASE=story_gen
 PORT=5050
 
-# Add your MySQL password here
-DB_PASSWORD=""
+ENV=local
 
-# When running locally, add your gemini api key here
-GEMINI_API=""
-GEMINI_MODEL="gemini-2.0-flash"
+DATABASE_URL=mysql://root:ziZqdUyLxeiqsDKgfQcpGJdXPpLYheGo@mysql.railway.internal:3306/railway
 ```
 
 ### Start the Application Locally
