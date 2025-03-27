@@ -40,9 +40,9 @@ const SavedStories = () => {
       setStories((prevStories) =>
         prevStories.filter((story) => story.id !== storyId)
       );
-      alert("Story deleted successfully!");
+      alert("Story deleted successfully!"); // Show success alert here
     } else {
-      alert(error);
+      alert(error); // Show error alert
     }
   };
 
@@ -56,16 +56,17 @@ const SavedStories = () => {
   return (
     <div>
       <Header />
-      <div className="flex flex-row gap-4 mt-20">
+      <div
+        className={`flex ${
+          showModal ? "max-md:flex-col md:flex-row" : "flex-row"
+        }  md:gap-10 mt-20`}
+      >
         {/* Stories List */}
         <div
-          className={`bg-gray-100 p-6 rounded shadow-lg overflow-auto max-h-[80vh] transition-all duration-700 ease-in-out ${
-            showModal ? "hidden max-md:block md:w-1/3" : "w-full"
-          }`}
+          className={`bg-gray-100 p-6 rounded shadow-lg overflow-auto max-h-[80vh] transition-all duration-700 ease-in-out
+          ${showModal ? "max-md:hidden md:block" : "block"}`}
         >
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold">Saved Stories</h2>
-          </div>
+          <h2 className="text-2xl font-bold mb-8 mt-8">Saved Stories</h2>
           <div className="grid grid-cols-1 gap-6">
             {stories.length === 0 ? (
               <p className="text-gray-500 text-center col-span-full">
@@ -87,23 +88,24 @@ const SavedStories = () => {
         </div>
 
         {/* Modal */}
-        {showModal && (
-          <div className="w-full md:w-2/3 transition-all duration-700 ease-in-out mt-0">
-            <Modal
-              show={showModal}
-              onClose={handleCloseModal}
-              title={selectedStory?.title}
-              genre={selectedStory?.genre}
-              description={selectedStory?.description}
-              story={selectedStory?.story}
-              storyLength={selectedStory?.length}
-              storyId={selectedStory?.id}
-              userId={userId}
-              onDelete={handleDeleteStory}
-              onAddStory={handleAddStory}
-            />
-          </div>
-        )}
+        <div
+          className={`transition-all duration-700 ease-in-out w-full
+          ${showModal ? "opacity-100 scale-100" : "hidden opacity-0 scale-90"}`}
+        >
+          <Modal
+            show={showModal}
+            onClose={handleCloseModal}
+            title={selectedStory?.title}
+            genre={selectedStory?.genre}
+            description={selectedStory?.description}
+            story={selectedStory?.story}
+            storyLength={selectedStory?.length}
+            storyId={selectedStory?.id}
+            userId={userId} // Pass userId to Modal
+            onDelete={handleDeleteStory}
+            onAddStory={handleAddStory} // Pass handleAddStory to Modal
+          />
+        </div>
       </div>
     </div>
   );
