@@ -7,11 +7,16 @@ const TTSControls = ({ story }) => {
   const ttsRef = useRef(null);
   const [isTtsPlaying, setIsTtsPlaying] = useState(false);
   const [voices, setVoices] = useState([]);
+  const [selectedVoice, setSelectedVoice] = useState("");
 
   useEffect(() => {
     const loadVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
       setVoices(availableVoices);
+      if (availableVoices.length > 0) {
+        // Default to the 8th voice if available, otherwise the first voice
+        setSelectedVoice(availableVoices[7]?.name || availableVoices[0].name);
+      }
     };
 
     loadVoices();
@@ -34,11 +39,9 @@ const TTSControls = ({ story }) => {
         const utterance = new SpeechSynthesisUtterance(story);
         utterance.lang = "en-US";
 
-        const selectedVoice = voices.find((voice) =>
-          voice.name.toLowerCase().includes("female")
-        );
-        if (selectedVoice) {
-          utterance.voice = selectedVoice;
+        const voice = voices.find((voice) => voice.name === selectedVoice);
+        if (voice) {
+          utterance.voice = voice;
         }
 
         utterance.onend = () => setIsTtsPlaying(false);
@@ -52,7 +55,18 @@ const TTSControls = ({ story }) => {
   };
 
   return (
-    <div>
+    <div className="flex items-center space-x-4">
+      <select
+        value={selectedVoice}
+        onChange={(e) => setSelectedVoice(e.target.value)}
+        className="p-2 border border-gray-300 rounded bg-white text-black"
+      >
+        {voices.map((voice) => (
+          <option key={voice.name} value={voice.name}>
+            {voice.name}
+          </option>
+        ))}
+      </select>
       <button
         className="bg-blue-500 p-3 rounded-full shadow-lg hover:bg-blue-600 transition"
         onClick={handlePlayPause}

@@ -1,4 +1,8 @@
-const { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } = require("@google/generative-ai");
+const {
+  GoogleGenerativeAI,
+  HarmBlockThreshold,
+  HarmCategory,
+} = require("@google/generative-ai");
 const db = require("../config/db");
 const storyRepository = require("../repositories/storyRepository");
 
@@ -27,16 +31,25 @@ const model = genAI.getGenerativeModel({
       category: HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY,
       threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
     },
-  ]
+  ],
 });
 
 const HARMFUL_THEMES = [
   "HARASSMENT",
   "HATESPEECH",
   "SEXUALLY EXPLICIT",
-  "DANGEROUS CONTENT"
+  "DANGEROUS CONTENT",
 ];
 
+const PROMPT_FORMAT = `
+Format:
+- Title in quotes (""), followed by the story content
+- The story must be written in plain English, without using any special encoding (e.g., binary, hexadecimal, or other formats)
+- The story must not replace words with repetitive or nonsensical text (e.g., replacing every word with "hi")
+- The story must not include harmful, inappropriate, or unsafe content for children
+- If the requested content contains harmful themes, respond with a list of the themes it violates: 
+  - ${HARMFUL_THEMES.join("\n\t- ")}
+`;
 
 // generate story from gemini
 const generate = async (storyLength, storyGenre, storyDescription) => {
@@ -49,12 +62,9 @@ const generate = async (storyLength, storyGenre, storyDescription) => {
   - Suitable for children aged 3-8
   - Focused on relatable experiences
 
-  Format:
-  - Title in quotes (""), followed by the story content
-  - If the requested content contains harmful themes, respond with a list of the themes it violates: 
-    - ${HARMFUL_THEMES.join("\n\t- ")}
+  ${PROMPT_FORMAT}
   `;
-  
+
   console.log("Sending prompt to Gemini API:", modified_prompt);
 
   try {
@@ -76,8 +86,8 @@ const generate = async (storyLength, storyGenre, storyDescription) => {
 
     return { storyTitle, story };
   } catch (error) {
-    console.error("Error during Gemini API call:", error);
-    throw error;
+    console.error("Error during Gemini API call:", error.message);
+    throw new Error(`Story generation failed: ${error.message}`);
   }
 };
 
@@ -106,10 +116,7 @@ const continueStory = async (
   - Suitable for children aged 3-8
   - Focused on relatable experiences
 
-  Format:
-  - Only by the story content
-  - If the requested content contains harmful themes, respond with a list of the themes it violates: 
-    - ${HARMFUL_THEMES.join("\n\t- ")}
+  ${PROMPT_FORMAT}
   `;
 
   console.log("Sending continuation prompt to Gemini API:", modified_prompt);
@@ -131,18 +138,6 @@ const continueStory = async (
     throw error;
   }
 };
-
-// check for any harmful themes in the story
-const checkForHarmfulThemes = (responseText) => {
-  const detectedThemes = HARMFUL_THEMES.filter((theme) =>
-    responseText.includes(theme)
-  );
-
-  if (detectedThemes.length > 0) {
-    throw new Error(`Harmful content detected: ${detectedThemes.join(", ")}`);
-  }
-};
-
 
 // get all stories attached to a userId
 const getStoriesByUserId = async (userId) => {
